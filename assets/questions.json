@@ -1,0 +1,2540 @@
+{
+  "version": "1.1.0",
+  "language": "uz",
+  "title": "Random Challenge - Offline Questions",
+  "description": "O'zbek tilidagi random savollar va topshiriqlar bazasi",
+  "total": 1000,
+  "selection": {
+    "default_counts": [
+      20,
+      30,
+      50
+    ],
+    "allow_custom_count": true,
+    "no_duplicates_within_game": true,
+    "timer_values_seconds": [
+      10,
+      15,
+      20,
+      25,
+      30,
+      45,
+      60
+    ],
+    "untimed_tasks_supported": true,
+    "timed_ratio_percent": 55,
+    "untimed_ratio_percent": 45
+  },
+  "categories": [
+    {
+      "id": "quick",
+      "name": "Tezkor fikrlash",
+      "count": 200,
+      "icon": "bolt",
+      "color": "#00f0ff"
+    },
+    {
+      "id": "funny",
+      "name": "Kulgili shartlar",
+      "count": 200,
+      "icon": "mood",
+      "color": "#ff007f"
+    },
+    {
+      "id": "question",
+      "name": "Savol-javob",
+      "count": 180,
+      "icon": "help_outline",
+      "color": "#7928ca"
+    },
+    {
+      "id": "acting",
+      "name": "Taqlid va aktyorlik",
+      "count": 150,
+      "icon": "theater_comedy",
+      "color": "#ffbe0b"
+    },
+    {
+      "id": "friends",
+      "name": "Do'stlar va davra",
+      "count": 150,
+      "icon": "groups",
+      "color": "#00ff87"
+    },
+    {
+      "id": "creative",
+      "name": "Kreativ topshiriqlar",
+      "count": 120,
+      "icon": "lightbulb",
+      "color": "#ff4d4d"
+    }
+  ],
+  "data": [
+    {
+      "id": "q_0777",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Maqtov zanjiri",
+      "description": "O'ng tomoningdagi odamga bitta samimiy kompliment ayt, u keyingisiga davom ettirsin. Biror aniq misol keltir.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0508",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 23",
+      "description": "Qaysi film yoki kitob senga kuchli taassurot qoldirgan? Boshqalardan ham shu savolga javob so'ra.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "group",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0896",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Kelajakdagi o'zing",
+      "description": "10 yildan keyingi o'zingga qisqa audio xabar kabi murojaat qil. Oxirida nima uchun bu g'oya foydali ekanini ayt.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0923",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Yangi sport",
+      "description": "Yangi sport turi o'ylab top: qoidalari va g'alaba shartini tushuntir. Boshqalardan bitta tasodifiy so'z ol va ishlat.",
+      "duration": 45,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "group",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0034",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Hayvonlar: tezkor ro'yxat",
+      "description": "20 soniya ichida 9 ta hayvonlar nomini ayt. Bir xil javobni takrorlama.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0484",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 19",
+      "description": "Kayfiyatingni tez ko'taradigan qo'shiq yoki musiqa turi qaysi? Boshqalardan ham shu savolga javob so'ra.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "medium",
+      "players": "group",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0086",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Sport turlari: tezkor ro'yxat",
+      "description": "10 soniya ichida 5 ta sport turlari nomini ayt. Bir xil javobni takrorlama.",
+      "duration": 10,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0751",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Jamoa nomi",
+      "description": "Hamma uchun kulgili jamoa nomini o'ylab top.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0355",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Telenovella",
+      "description": "Oddiy bir gapni juda dramatik serial qahramonidek ayt go'yo katta sahnada turgandek.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0524",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 26",
+      "description": "O'zing haqingda ko'pchilik bilmaydigan qiziq, oddiy fakt ayt. Javob berayotganda eng birinchi xayolingga kelgan fikrni ayt.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0185",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Robot rejimi",
+      "description": "20 soniya davomida robot kabi gapir go'yo katta sahnada turgandek. Har bir gapdan keyin kichik robot tovushini qo'sh.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0810",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Yangi tanishuv",
+      "description": "O'zingni davradagi bir odam bilan birinchi marta tanishayotgandek tanishtir. Javobni hamma eshitadigan qilib ayt.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0419",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 9",
+      "description": "Bir kun davomida telefon ishlatmasang, vaqtni qanday o'tkazarding?",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0616",
+      "type": "challenge",
+      "category": "acting",
+      "title": "Haykal",
+      "description": "Boshqalar aytgan mavzuga mos haykal holatida 10 soniya qotib tur. Boshqa odamning yordamisiz bajar.",
+      "duration": 10,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "acting",
+        "mimicry",
+        "performance"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0683",
+      "type": "challenge",
+      "category": "acting",
+      "title": "Robot raqsi",
+      "description": "Biroz vaqt davomida robotga o'xshash kulgili raqs harakatlarini qil. Buni kulgili, lekin odobli tarzda bajar.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "acting",
+        "mimicry",
+        "performance"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0502",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 22",
+      "description": "Biror narsani o'zgartirish imkoning bo'lsa, maktab yoki ish kunida nimani o'zgartirarding? Boshqalardan ham shu savolga javob so'ra.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "medium",
+      "players": "group",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0761",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Do'stlik savoli",
+      "description": "Davradagilardan biriga: 'Birga qaysi yangi mashg'ulotni sinab ko'rsak bo'ladi?' deb so'ra.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0050",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Davlatlar: tezkor ro'yxat",
+      "description": "10 soniya ichida 6 ta davlatlar nomini ayt. Bir xil javobni takrorlama.",
+      "duration": 10,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0733",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Umumiy xotira",
+      "description": "Davradagi kim bilandir bog'liq kulgili yoki yoqimli umumiy xotirani ayt. Samimiy va hurmat bilan bajar.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0337",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Ajoyib kashfiyot",
+      "description": "Oddiy buyumdan qanday ajoyib ixtiro qilish mumkinligini kulgili tarzda tushuntir sekin va tantanali tarzda.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0451",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 14",
+      "description": "Agar biror tarixiy davrga mehmon bo'lib bora olsang, qaysi davrni tanlarding? Javobingga sabab ham ayt.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0791",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Birgalikdagi reja",
+      "description": "Davradagi bir kishi bilan amalga oshirish mumkin bo'lgan qiziqarli reja taklif qil.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0351",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Telenovella",
+      "description": "Oddiy bir gapni juda dramatik serial qahramonidek ayt juda jiddiy ohangda.",
+      "duration": 15,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0468",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 17",
+      "description": "Seningcha, yaxshi do'stning eng muhim xususiyati nima? Javobingni bitta misol bilan tushuntir.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0623",
+      "type": "challenge",
+      "category": "acting",
+      "title": "Ertak qahramoni",
+      "description": "O'zing yoqtirgan ertak qahramonini ovozi va harakati bilan ko'rsat. Buni kulgili, lekin odobli tarzda bajar.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "acting",
+        "mimicry",
+        "performance"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0477",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 18",
+      "description": "Agar o'zingga 10 yil oldingi holatingga maslahat bera olsang, nima derding? Javobingni qisqa va aniq ifodala.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0615",
+      "type": "challenge",
+      "category": "acting",
+      "title": "Haykal",
+      "description": "Boshqalar aytgan mavzuga mos haykal holatida 10 soniya qotib tur. Davradagilardan biri mavzuni tanlasin.",
+      "duration": 10,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "acting",
+        "mimicry",
+        "performance"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0555",
+      "type": "challenge",
+      "category": "acting",
+      "title": "Hayvonni top",
+      "description": "Biror uy hayvonini gapirmasdan harakat bilan ko'rsat. Boshqalar topsin. Davradagilardan biri mavzuni tanlasin.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "acting",
+        "mimicry",
+        "performance"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0366",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Maxfiy agent",
+      "description": "O'zingni maxfiy agentdek tanishtir va bugungi xayoliy vazifangni ayt shoshilinch vaziyatdagidek.",
+      "duration": 25,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0771",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Maqtov zanjiri",
+      "description": "O'ng tomoningdagi odamga bitta samimiy kompliment ayt, u keyingisiga davom ettirsin.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0631",
+      "type": "challenge",
+      "category": "acting",
+      "title": "Kasb intervyusi",
+      "description": "Xayoliy kasb egasi roliga kirib, o'zingni tanishtir.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "acting",
+        "mimicry",
+        "performance"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0941",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Bir jumlalik film",
+      "description": "Faqat bitta jumla bilan qiziqarli film syujetini o'ylab top.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0798",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Birgalikdagi reja",
+      "description": "Davradagi bir kishi bilan amalga oshirish mumkin bo'lgan qiziqarli reja taklif qil. Buni tabassumli ohangda ayt.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0497",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 22",
+      "description": "Biror narsani o'zgartirish imkoning bo'lsa, maktab yoki ish kunida nimani o'zgartirarding?",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0925",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Yangi sport",
+      "description": "Yangi sport turi o'ylab top: qoidalari va g'alaba shartini tushuntir. Buni xuddi taqdimot qilayotgandek tushuntir.",
+      "duration": 45,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0370",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Maxfiy agent",
+      "description": "O'zingni maxfiy agentdek tanishtir va bugungi xayoliy vazifangni ayt o'zingga xos uslubda.",
+      "duration": 25,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0597",
+      "type": "challenge",
+      "category": "acting",
+      "title": "Jim kino",
+      "description": "Suv ichish yoki kitob o'qishni ovozsiz sahna qilib ko'rsat. Imkon qadar tabiiy chiqishga harakat qil.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "acting",
+        "mimicry",
+        "performance"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0721",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Kulgili laqab",
+      "description": "Biror do'stingga hurmatli va yoqimli kulgili laqab top, sababini tushuntir.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0054",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Kasblar: tezkor ro'yxat",
+      "description": "20 soniya ichida 10 ta kasblar nomini ayt. Bir xil javobni takrorlama.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0427",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 10",
+      "description": "Eng kulgili tasodifiy vaziyatlardan birini eslab ayt. Javobingga sabab ham ayt.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0057",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Kasblar: tezkor ro'yxat",
+      "description": "15 soniya ichida 6 ta kasblar nomini ayt. Bir xil javobni takrorlama.",
+      "duration": 15,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0265",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Hayron qolgan odam",
+      "description": "Kimdir senga oddiy qoshiqni dunyodagi eng katta yangilikdek ko'rsatgandek munosabat bildir go'yo katta sahnada turgandek.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0175",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Reklama yulduzi",
+      "description": "Yonindagi oddiy buyumni tanla va uni eng zo'r ixtirodek 20 soniya reklama qil go'yo katta sahnada turgandek.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0151",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Maktab buyumlari: tezkor ro'yxat",
+      "description": "30 soniya ichida 10 ta maktab buyumlari nomini ayt. Bir xil javobni takrorlama.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0742",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Bir so'zli ta'rif",
+      "description": "Davradagi bir kishini bitta ijobiy so'z bilan ta'rifla va sababini ayt. Ismni aytib murojaat qil.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0114",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Ichimliklar: tezkor ro'yxat",
+      "description": "20 soniya ichida 12 ta ichimliklar nomini ayt. Bir xil javobni takrorlama.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "hard",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0966",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Xayoliy sayyora",
+      "description": "Yangi sayyora nomini, undagi bitta g'alati qonunni va bir odatini tasvirla. Oxirida nima uchun bu g'oya foydali ekanini ayt.",
+      "duration": 45,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0019",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Hayvonlar: tezkor ro'yxat",
+      "description": "15 soniya ichida 7 ta hayvonlar nomini ayt. Bir xil javobni takrorlama.",
+      "duration": 15,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0190",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Robot rejimi",
+      "description": "20 soniya davomida robot kabi gapir o'zingga xos uslubda. Har bir gapdan keyin kichik robot tovushini qo'sh.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0415",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 8",
+      "description": "Senga eng yoqadigan fasl qaysi va nima uchun? Javobingga sabab ham ayt.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0590",
+      "type": "challenge",
+      "category": "acting",
+      "title": "Kayfiyat almashinuvi",
+      "description": "Bir xil jumlani xursand, hayron va juda charchagan odamdek uch xil ayt. Bir marta takrorlashga ruxsat bor.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "acting",
+        "mimicry",
+        "performance"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0667",
+      "type": "challenge",
+      "category": "acting",
+      "title": "Sekin harakat",
+      "description": "Xonadagi bir joydan ikkinchi joyga go'yo vaqt juda sekin o'tayotgandek yur. Imkon qadar tabiiy chiqishga harakat qil.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "acting",
+        "mimicry",
+        "performance"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0764",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Do'stlik savoli",
+      "description": "Davradagilardan biriga: 'Birga qaysi yangi mashg'ulotni sinab ko'rsak bo'ladi?' deb so'ra. Boshqa odam ham javob berishi uchun imkon qoldir.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0222",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Kutilmagan intervyu",
+      "description": "O'zingdan intervyu ol: ham savol ber, ham javob ber quvnoq ohangda. 3 ta savol bo'lsin.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0300",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Ertakchi",
+      "description": "Xonadagi uchta buyumni qatnashtirib, qisqa kichik ertak to'qib ber o'zingga xos uslubda.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0639",
+      "type": "challenge",
+      "category": "acting",
+      "title": "Kasb intervyusi",
+      "description": "Xayoliy kasb egasi roliga kirib, o'zingni tanishtir. Yakunda kichik ta'zim bilan tugat.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "acting",
+        "mimicry",
+        "performance"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0387",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 3",
+      "description": "Agar hozir istalgan shaharga sayohat qila olsang, qayerga borarding? Javobingni qisqa va aniq ifodala.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0365",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Maxfiy agent",
+      "description": "O'zingni maxfiy agentdek tanishtir va bugungi xayoliy vazifangni ayt go'yo katta sahnada turgandek.",
+      "duration": 25,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0880",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Yangi bayram",
+      "description": "O'zing yangi bayram o'ylab top: nomi, sanasi va qanday nishonlanishini ayt. Eng kutilmagan variantni tanla.",
+      "duration": 45,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0017",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Mevalar: tezkor ro'yxat",
+      "description": "20 soniya ichida 9 ta mevalar nomini ayt. Bir xil javobni takrorlama.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0203",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Sekinlashtirilgan film",
+      "description": "Oddiy bir ishni, masalan, suv ichishni, xuddi sekinlashtirilgan filmdek tasvirlab ber xuddi jonli efirdagidek.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0002",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Mevalar: tezkor ro'yxat",
+      "description": "15 soniya ichida 7 ta mevalar nomini ayt. Bir xil javobni takrorlama.",
+      "duration": 15,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0039",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Davlatlar: tezkor ro'yxat",
+      "description": "30 soniya ichida 15 ta davlatlar nomini ayt. Bir xil javobni takrorlama.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "hard",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0291",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Ertakchi",
+      "description": "Xonadagi uchta buyumni qatnashtirib, 30 soniyalik kichik ertak to'qib ber juda jiddiy ohangda.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0494",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 21",
+      "description": "Senga berilgan eng foydali maslahat qaysi? Javob berayotganda eng birinchi xayolingga kelgan fikrni ayt.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0248",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Jiddiy yangilik",
+      "description": "Xonada hozir bo'layotgan oddiy holatni shoshilinch yangilikdek e'lon qil xuddi hujjatli film boshlovchisidek.",
+      "duration": 25,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0507",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 23",
+      "description": "Qaysi film yoki kitob senga kuchli taassurot qoldirgan? Javobingni qisqa va aniq ifodala.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0897",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Kelajakdagi o'zing",
+      "description": "10 yildan keyingi o'zingga qisqa audio xabar kabi murojaat qil. G'oyangni bir misol bilan ko'rsat.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0714",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Minnatdorchilik",
+      "description": "Davradagi bir kishiga u qilgan kichik yaxshiligi uchun rahmat ayt. Boshqa odam ham javob berishi uchun imkon qoldir.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0892",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Kelajakdagi o'zing",
+      "description": "10 yildan keyingi o'zingga qisqa audio xabar kabi murojaat qil. Eng kamida ikkita noodatiy detal qo'sh.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0077",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Ranglar: tezkor ro'yxat",
+      "description": "15 soniya ichida 10 ta ranglar nomini ayt. Bir xil javobni takrorlama.",
+      "duration": 15,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0912",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Mini ertak",
+      "description": "Ikki buyum va bitta hayvon qatnashgan qisqa ertak to'qib ber. Eng kamida ikkita noodatiy detal qo'sh.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0793",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Birgalikdagi reja",
+      "description": "Davradagi bir kishi bilan amalga oshirish mumkin bo'lgan qiziqarli reja taklif qil. Samimiy va hurmat bilan bajar.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0509",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 24",
+      "description": "Agar bir kun mashhur ixtirochi bo'lsang, nimani yaratarding?",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0178",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Reklama yulduzi",
+      "description": "Yonindagi oddiy buyumni tanla va uni eng zo'r ixtirodek 20 soniya reklama qil xuddi hujjatli film boshlovchisidek.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0843",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Rahmat aytish",
+      "description": "Davradagi bir kishining bugungi kayfiyatga qo'shgan hissasi uchun minnatdorchilik bildir. Samimiy va hurmat bilan bajar.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0201",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Sekinlashtirilgan film",
+      "description": "Oddiy bir ishni, masalan, suv ichishni, xuddi sekinlashtirilgan filmdek tasvirlab ber juda jiddiy ohangda.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0910",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Mahsulot nomi",
+      "description": "Xonadagi bir buyum uchun yangi brend nomi va shior o'ylab top. Eng kutilmagan variantni tanla.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0539",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 29",
+      "description": "Seni kuldirishning eng oson yo'li nima?",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0025",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Hayvonlar: tezkor ro'yxat",
+      "description": "10 soniya ichida 4 ta hayvonlar nomini ayt. Bir xil javobni takrorlama.",
+      "duration": 10,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0695",
+      "type": "challenge",
+      "category": "acting",
+      "title": "Ovozli obraz",
+      "description": "Biror multfilm qahramoniga o'xshash ovozda o'zing haqingda ikki gap ayt. Davradagilardan biri mavzuni tanlasin.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "acting",
+        "mimicry",
+        "performance"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0211",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Hashamatli taqdimot",
+      "description": "Oddiy ruchkani juda qimmat va noyob mahsulotdek tanishtir juda jiddiy ohangda.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0425",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 10",
+      "description": "Eng kulgili tasodifiy vaziyatlardan birini eslab ayt.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0529",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 27",
+      "description": "Agar uchta tilni bemalol bilish imkoning bo'lsa, qaysilarini tanlarding? Javobingga sabab ham ayt.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0035",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Davlatlar: tezkor ro'yxat",
+      "description": "10 soniya ichida 5 ta davlatlar nomini ayt. Bir xil javobni takrorlama.",
+      "duration": 10,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0929",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Yangi sport",
+      "description": "Yangi sport turi o'ylab top: qoidalari va g'alaba shartini tushuntir. Boshqa odamlar ham bitta taklif qo'shishi mumkin.",
+      "duration": 45,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "group",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0608",
+      "type": "challenge",
+      "category": "acting",
+      "title": "Mashhur sport",
+      "description": "Biror sport turini jihozlarsiz, faqat harakat bilan ko'rsat. Harakatlaringni aniq va tushunarli qil.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "acting",
+        "mimicry",
+        "performance"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0283",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Sport sharhlovchisi",
+      "description": "Biror kishining oddiy yurishini sport musobaqasi sharhlovchisidek tasvirla xuddi jonli efirdagidek.",
+      "duration": 25,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0940",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Sehrli qobiliyat",
+      "description": "Juda oddiy, lekin kulgili super kuch o'ylab top va qachon ishlatishingni ayt. Eng kutilmagan variantni tanla.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0945",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Bir jumlalik film",
+      "description": "Faqat bitta jumla bilan qiziqarli film syujetini o'ylab top. Buni xuddi taqdimot qilayotgandek tushuntir.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0607",
+      "type": "challenge",
+      "category": "acting",
+      "title": "Mashhur sport",
+      "description": "Biror sport turini jihozlarsiz, faqat harakat bilan ko'rsat. Imkon qadar tabiiy chiqishga harakat qil.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "acting",
+        "mimicry",
+        "performance"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0960",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Restoran konsepti",
+      "description": "G'alati, ammo qiziqarli restoran nomi va uning asosiy taomini o'ylab top. Eng kutilmagan variantni tanla.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0935",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Sehrli qobiliyat",
+      "description": "Juda oddiy, lekin kulgili super kuch o'ylab top va qachon ishlatishingni ayt. Buni xuddi taqdimot qilayotgandek tushuntir.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0732",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Umumiy xotira",
+      "description": "Davradagi kim bilandir bog'liq kulgili yoki yoqimli umumiy xotirani ayt. Ismni aytib murojaat qil.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0288",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Sport sharhlovchisi",
+      "description": "Biror kishining oddiy yurishini sport musobaqasi sharhlovchisidek tasvirla xuddi hujjatli film boshlovchisidek.",
+      "duration": 25,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0528",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 27",
+      "description": "Agar uchta tilni bemalol bilish imkoning bo'lsa, qaysilarini tanlarding? Javobingni bitta misol bilan tushuntir.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0808",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Yangi tanishuv",
+      "description": "O'zingni davradagi bir odam bilan birinchi marta tanishayotgandek tanishtir. Buni tabassumli ohangda ayt.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0437",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 12",
+      "description": "Qaysi kichik yutuqing seni xursand qilgan?",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0029",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Hayvonlar: tezkor ro'yxat",
+      "description": "20 soniya ichida 12 ta hayvonlar nomini ayt. Bir xil javobni takrorlama.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "hard",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0375",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 1",
+      "description": "Agar bir kun istalgan kasbni sinab ko'rish imkoning bo'lsa, qaysi kasbni tanlarding va nima uchun? Javobingni qisqa va aniq ifodala.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0820",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Yaxshi tilak",
+      "description": "Davradagi bir kishiga kelgusi hafta uchun yaxshi tilak bildir. Javobni hamma eshitadigan qilib ayt.",
+      "duration": 15,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0317",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Sirli qahramon",
+      "description": "O'zingni sirli qahramondek tanishtir, lekin super kuching juda oddiy bo'lsin sekin va tantanali tarzda.",
+      "duration": 25,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0561",
+      "type": "challenge",
+      "category": "acting",
+      "title": "Kasbni ko'rsat",
+      "description": "Biror kasb egasining kundalik ishini gapirmasdan ko'rsat. Boshqalar kasbni topsin.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "acting",
+        "mimicry",
+        "performance"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0242",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Jiddiy yangilik",
+      "description": "Xonada hozir bo'layotgan oddiy holatni shoshilinch yangilikdek e'lon qil quvnoq ohangda.",
+      "duration": 25,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0150",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Maktab buyumlari: tezkor ro'yxat",
+      "description": "30 soniya ichida 8 ta maktab buyumlari nomini ayt. Bir xil javobni takrorlama.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0517",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 25",
+      "description": "Seningcha, ideal dam olish kuni qanday o'tadi? Javobingga sabab ham ayt.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0661",
+      "type": "challenge",
+      "category": "acting",
+      "title": "Sekin harakat",
+      "description": "Xonadagi bir joydan ikkinchi joyga go'yo vaqt juda sekin o'tayotgandek yur.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "acting",
+        "mimicry",
+        "performance"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0199",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Ob-havo boshlovchisi",
+      "description": "Xonadagi kayfiyatni ob-havo ma'lumotidek jiddiy ohangda e'lon qil hayratlangan holda.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0326",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Qo'shiqchi boshlovchi",
+      "description": "Ismingni qo'shiq ohangida aytib, o'zingni tanishtir shoshilinch vaziyatdagidek.",
+      "duration": 15,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0824",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Jamoaviy hikoya",
+      "description": "Hamma navbat bilan bittadan gap qo'shib hikoya tuzishni boshlash uchun birinchi gapni ayt. Boshqa odam ham javob berishi uchun imkon qoldir.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0703",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Yaxshi sifat",
+      "description": "Davradagi bir kishiga uning uchta yaxshi sifatini ayt. Samimiy va hurmat bilan bajar.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0950",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Bir jumlalik film",
+      "description": "Faqat bitta jumla bilan qiziqarli film syujetini o'ylab top. Eng kutilmagan variantni tanla.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0865",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Uch so'zli hikoya",
+      "description": "Davradagilar aytgan uchta tasodifiy so'zdan qisqa hikoya tuz. Buni xuddi taqdimot qilayotgandek tushuntir.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0837",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Bir xil qiziqish",
+      "description": "Davradagi kim bilandir umumiy qiziqishingizni topishga harakat qil. Biror aniq misol keltir.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0878",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Yangi bayram",
+      "description": "O'zing yangi bayram o'ylab top: nomi, sanasi va qanday nishonlanishini ayt. Oddiy va tushunarli qilib izohla.",
+      "duration": 45,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0360",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Telenovella",
+      "description": "Oddiy bir gapni juda dramatik serial qahramonidek ayt o'zingga xos uslubda.",
+      "duration": 15,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0595",
+      "type": "challenge",
+      "category": "acting",
+      "title": "Jim kino",
+      "description": "Suv ichish yoki kitob o'qishni ovozsiz sahna qilib ko'rsat. Davradagilardan biri mavzuni tanlasin.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "acting",
+        "mimicry",
+        "performance"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0789",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Kim ko'proq",
+      "description": "Davradagilar orasida eng ko'p sayohat qilishni xohlaydigan odamni tanla va nima uchun deb o'ylashingni ayt. Tanlovingni bir jumla bilan izohla.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0189",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Robot rejimi",
+      "description": "Biroz vaqt davomida robot kabi gapir hayratlangan holda. Har bir gapdan keyin kichik robot tovushini qo'sh.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0067",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Kasblar: tezkor ro'yxat",
+      "description": "10 soniya ichida 6 ta kasblar nomini ayt. Bir xil javobni takrorlama.",
+      "duration": 10,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0356",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Telenovella",
+      "description": "Oddiy bir gapni juda dramatik serial qahramonidek ayt shoshilinch vaziyatdagidek.",
+      "duration": 15,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0800",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Birgalikdagi reja",
+      "description": "Davradagi bir kishi bilan amalga oshirish mumkin bo'lgan qiziqarli reja taklif qil. Javobni hamma eshitadigan qilib ayt.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0903",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Mahsulot nomi",
+      "description": "Xonadagi bir buyum uchun yangi brend nomi va shior o'ylab top. Boshqalardan bitta tasodifiy so'z ol va ishlat.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "group",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0921",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Yangi sport",
+      "description": "Yangi sport turi o'ylab top: qoidalari va g'alaba shartini tushuntir.",
+      "duration": 45,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0943",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Bir jumlalik film",
+      "description": "Faqat bitta jumla bilan qiziqarli film syujetini o'ylab top. Boshqalardan bitta tasodifiy so'z ol va ishlat.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "group",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0331",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Ajoyib kashfiyot",
+      "description": "Oddiy buyumdan qanday ajoyib ixtiro qilish mumkinligini kulgili tarzda tushuntir juda jiddiy ohangda.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0728",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Kulgili laqab",
+      "description": "Biror do'stingga hurmatli va yoqimli kulgili laqab top, sababini tushuntir. Buni tabassumli ohangda ayt.",
+      "duration": 30,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0397",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 5",
+      "description": "Biror yangi mahoratni darhol o'rganish imkoning bo'lsa, nimani tanlarding? Javobingga sabab ham ayt.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0464",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 16",
+      "description": "Biror kunni qayta yashash imkoning bo'lsa, qaysi kunni tanlarding? Javob berayotganda eng birinchi xayolingga kelgan fikrni ayt.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0394",
+      "type": "question",
+      "category": "question",
+      "title": "Qiziqarli savol 4",
+      "description": "Senga eng ko'p motivatsiya beradigan oddiy narsa nima? Boshqalardan ham shu savolga javob so'ra.",
+      "duration": null,
+      "time_limit": false,
+      "difficulty": "medium",
+      "players": "group",
+      "tags": [
+        "question",
+        "conversation",
+        "friends"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0312",
+      "type": "challenge",
+      "category": "funny",
+      "title": "Sirli qahramon",
+      "description": "O'zingni sirli qahramondek tanishtir, lekin super kuching juda oddiy bo'lsin quvnoq ohangda.",
+      "duration": 25,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "funny",
+        "acting",
+        "creative"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0681",
+      "type": "challenge",
+      "category": "acting",
+      "title": "Robot raqsi",
+      "description": "Biroz vaqt davomida robotga o'xshash kulgili raqs harakatlarini qil.",
+      "duration": 15,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "acting",
+        "mimicry",
+        "performance"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0745",
+      "type": "challenge",
+      "category": "friends",
+      "title": "Bir so'zli ta'rif",
+      "description": "Davradagi bir kishini bitta ijobiy so'z bilan ta'rifla va sababini ayt. Gapni qisqa, lekin aniq ayt.",
+      "duration": 20,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "friends",
+        "social",
+        "positive"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0992",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Uy jihozlari tezkor sinovi",
+      "description": "15 soniya ichida 7 ta uy jihozlari nomini ayt. Takrorlangan javob hisoblanmaydi.",
+      "duration": 15,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0982",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Shirinlik tezkor sinovi",
+      "description": "15 soniya ichida 7 ta shirinlik nomini ayt. Takrorlangan javob hisoblanmaydi.",
+      "duration": 15,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0976",
+      "type": "challenge",
+      "category": "quick",
+      "title": "Sabzavot tezkor sinovi",
+      "description": "15 soniya ichida 6 ta sabzavot nomini ayt. Takrorlangan javob hisoblanmaydi.",
+      "duration": 15,
+      "time_limit": true,
+      "difficulty": "easy",
+      "players": "single",
+      "tags": [
+        "quick",
+        "memory",
+        "timed"
+      ],
+      "language": "uz",
+      "is_active": true
+    },
+    {
+      "id": "q_0851",
+      "type": "challenge",
+      "category": "creative",
+      "title": "Yangi ixtiro",
+      "description": "Oddiy kundalik muammoni hal qiladigan yangi ixtiro o'ylab top va uning ishlashini tushuntir.",
+      "duration": 45,
+      "time_limit": true,
+      "difficulty": "medium",
+      "players": "single",
+      "tags": [
+        "creative",
+        "imagination",
+        "thinking"
+      ],
+      "language": "uz",
+      "is_active": true
+    }
+  ]
+}

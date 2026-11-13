@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Gotcha</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0D0D14;
+      --surface: #16161F;
+      --surface2: #1E1E2D;
+      --border: rgba(255,255,255,0.07);
+      --text: #F0F0FF;
+      --muted: #6B6B8A;
+      --accent: #7C5CFC;
+      --accent2: #FC5C9C;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+    body, html {
+      width: 100%; height: 100%; overflow: hidden;
+      background: var(--bg);
+      font-family: 'Nunito', sans-serif;
+      color: var(--text);
+    }
+
+    /* ───── Screens ───── */
+    .screen {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      transition: opacity .25s ease;
+    }
+    .screen.hidden { display: none; pointer-events: none; }
+
+    /* ══════════════════════════════════
+       START SCREEN
+    ══════════════════════════════════ */
+    #start-screen {
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      padding: 32px 24px;
+      background: var(--bg);
+      overflow: hidden;
+    }
+    /* Animated orb background */
+    #start-screen::before {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,92,252,.18) 0%, transparent 70%);
+      top: -120px; left: 50%; transform: translateX(-50%);
+      pointer-events: none;
+      animation: orbFloat 6s ease-in-out infinite;
+    }
+    #start-screen::after {
+      content: '';
+      position: absolute;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(252,92,156,.12) 0%, transparent 70%);
+      bottom: 40px; right: -60px;
+      pointer-events: none;
+      animation: orbFloat 8s ease-in-out infinite reverse;
+    }
+    @keyframes orbFloat {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-20px); }
+    }
+
+    .logo-wrap { text-align: center; position: relative; z-index:1; }
+    .logo-emoji { font-size: 52px; display: block; margin-bottom: 8px; animation: popIn .6s cubic-bezier(.34,1.56,.64,1); }
+    @keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .logo-text {
+      font-size: 48px; font-weight: 900; letter-spacing: -1px;
+      background: linear-gradient(135deg, #A78BFA, #F472B6, #60A5FA);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1;
+    }
+    .logo-sub {
+      margin-top: 8px; font-size: 14px; color: var(--muted); font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 24px;
+      width: 100%; max-width: 400px;
+      position: relative; z-index: 1;
+    }
+    .card-title {
+      font-size: 16px; font-weight: 800; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 1.5px;
+      margin-bottom: 16px; text-align: center;
+    }
+    .count-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .count-btn {
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 10px;
+      cursor: pointer;
+      text-align: center;
+      transition: all .2s cubic-bezier(.34,1.56,.64,1);
+      position: relative; overflow: hidden;
+    }
+    .count-btn::before {
+      content: ''; position: absolute; inset: 0; border-radius: 16px;
+      background: var(--glow-color, rgba(124,92,252,.0));
+      transition: background .2s;
+    }
+    .count-btn.sel { border-color: var(--glow-color, var(--accent)); box-shadow: 0 0 24px var(--glow-color, rgba(124,92,252,.35)); transform: scale(1.03); }
+    .count-btn.sel::before { background: color-mix(in srgb, var(--glow-color, var(--accent)) 15%, transparent); }
+    .count-num { font-size: 26px; font-weight: 900; display: block; }
+    .count-label { font-size: 11px; color: var(--muted); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+
+    .start-btn {
+      width: 100%; max-width: 400px;
+      height: 60px;
+      border-radius: 18px;
+      border: none;
+      background: linear-gradient(135deg, #7C5CFC, #FC5C9C);
+      color: #fff; font-family: 'Nunito', sans-serif;
+      font-size: 18px; font-weight: 900;
+      cursor: pointer; letter-spacing: .5px;
+      position: relative; z-index: 1;
+      box-shadow: 0 8px 32px rgba(124,92,252,.4);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .start-btn:active { transform: scale(.97); box-shadow: 0 4px 16px rgba(124,92,252,.3); }
+
+    /* ══════════════════════════════════
+       GAME SCREEN
+    ══════════════════════════════════ */
+    #game-screen { background: var(--bg); }
+    #touch-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+    .g-header {
+      position: absolute; top: 0; left: 0; width: 100%;
+      padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      z-index: 20;
+    }
+    .g-pill {
+      background: rgba(22,22,31,.85);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 18px;
+      font-size: 14px; font-weight: 800;
+      backdrop-filter: blur(8px);
+    }
+    .g-icon-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(22,22,31,.85);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 18px;
+      backdrop-filter: blur(8px);
+      transition: background .2s;
+    }
+    .g-icon-btn:active { background: rgba(255,255,255,.1); }
+
+    /* ══════════════════════════════════
+       CHALLENGE SCREEN
+    ══════════════════════════════════ */
+    #challenge-screen {
+      background: var(--bg);
+      padding: 0;
+      justify-content: flex-start;
+    }
+    .ch-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px 0;
+      flex-shrink: 0;
+    }
+    .ch-body {
+      flex: 1; display: flex; flex-direction: column;
+      padding: 16px 20px 20px;
+      gap: 16px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .winner-banner {
+      border-radius: 20px;
+      padding: 20px;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      position: relative; overflow: hidden;
+    }
+    .winner-banner::before {
+      content: ''; position: absolute; inset: 0;
+      background: var(--winner-color, var(--accent));
+      opacity: .12;
+    }
+    .winner-banner-ring {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--winner-color, var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 0 32px var(--winner-color, var(--accent));
+      position: relative; z-index: 1;
+    }
+    .winner-label { font-size: 11px; color: var(--muted); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; position: relative; z-index: 1; }
+    .winner-name { font-size: 22px; font-weight: 900; position: relative; z-index: 1; }
+
+    .challenge-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 24px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .cat-pill {
+      align-self: flex-start;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px; font-weight: 800;
+      letter-spacing: .5px; text-transform: uppercase;
+      border: 1px solid currentColor;
+    }
+    .ch-title { font-size: 20px; font-weight: 900; }
+    .ch-desc { font-size: 16px; line-height: 1.6; color: rgba(240,240,255,.8); font-weight: 700; }
+
+    /* Timer */
+    .timer-wrap {
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+    }
+    .timer-ring-box {
+      position: relative; width: 100px; height: 100px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .timer-ring-box svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+    .timer-ring-box .t-bg { fill: none; stroke: rgba(255,255,255,.08); stroke-width: 6; }
+    .timer-ring-box .t-fg { fill: none; stroke-width: 6; stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke .3s; }
+    .timer-num { font-size: 36px; font-weight: 900; position: relative; z-index: 1; }
+
+    .begin-btn {
+      width: 100%;
+      height: 54px; border-radius: 16px; border: none;
+      font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 900;
+      cursor: pointer; letter-spacing: .3px;
+      background: linear-gradient(135deg, #7C5CFC, #FC5C9C);
+      color: #fff;
+      box-shadow: 0 6px 24px rgba(124,92,252,.35);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .begin-btn:active { transform: scale(.97); }
+
+    .action-row { display: flex; gap: 12px; }
+    .act-btn {
+      flex: 1; height: 56px; border-radius: 16px;
+      font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+      border: 2px solid;
+      transition: transform .15s, background .15s;
+    }
+    .act-btn:active { transform: scale(.96); }
+    .btn-fail { border-color: #FF4B6E; color: #FF4B6E; background: rgba(255,75,110,.08); }
+    .btn-fail:active { background: rgba(255,75,110,.18); }
+    .btn-win { border-color: #3DDC84; color: #3DDC84; background: rgba(61,220,132,.08); }
+    .btn-win:active { background: rgba(61,220,132,.18); }
+
+    .next-btn {
+      width: 100%; height: 54px; border-radius: 16px; border: none;
+      font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 900;
+      cursor: pointer; background: var(--surface2);
+      color: var(--text); border: 1px solid var(--border);
+      transition: background .15s;
+    }
+    .next-btn:active { background: rgba(255,255,255,.08); }
+
+    /* ══════════════════════════════════
+       CUSTOM MODAL
+    ══════════════════════════════════ */
+    .modal-bg {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.7);
+      backdrop-filter: blur(10px);
+      display: flex; align-items: flex-end;
+      z-index: 999;
+      transition: opacity .2s;
+    }
+    .modal-bg.hidden { display: none; }
+    .modal-sheet {
+      width: 100%; background: var(--surface);
+      border-radius: 28px 28px 0 0;
+      padding: 12px 24px 40px;
+      animation: slideUp .3s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .modal-handle { width: 40px; height: 4px; border-radius: 2px; background: var(--border); margin: 0 auto 24px; }
+    .modal-title { font-size: 20px; font-weight: 900; margin-bottom: 6px; }
+    .modal-sub { font-size: 13px; color: var(--muted); font-weight: 700; margin-bottom: 20px; }
+    .modal-input {
+      width: 100%; padding: 16px; border-radius: 16px;
+      background: var(--surface2); border: 1.5px solid var(--border);
+      color: var(--text); font-family: 'Nunito', sans-serif;
+      font-size: 28px; font-weight: 900; text-align: center;
+      outline: none; margin-bottom: 16px;
+      transition: border-color .2s;
+    }
+    .modal-input:focus { border-color: var(--accent); }
+    .modal-btns { display: flex; gap: 12px; }
+    .modal-cancel {
+      flex: 1; height: 52px; border-radius: 14px; border: 1px solid var(--border);
+      background: transparent; color: var(--muted);
+      font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800; cursor: pointer;
+    }
+    .modal-ok {
+      flex: 2; height: 52px; border-radius: 14px; border: none;
+      background: linear-gradient(135deg, #7C5CFC, #FC5C9C);
+      color: #fff; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(124,92,252,.35);
+    }
+
+    /* Game over modal */
+    .go-modal-bg {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.8);
+      backdrop-filter: blur(12px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 999; padding: 24px;
+    }
+    .go-modal-bg.hidden { display: none; }
+    .go-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 32px 24px;
+      text-align: center;
+      width: 100%; max-width: 360px;
+      animation: popIn .4s cubic-bezier(.34,1.56,.64,1);
+    }
+    .go-emoji { font-size: 56px; margin-bottom: 12px; }
+    .go-title { font-size: 26px; font-weight: 900; margin-bottom: 8px; }
+    .go-sub { font-size: 14px; color: var(--muted); font-weight: 700; margin-bottom: 24px; }
+    .go-btn {
+      width: 100%; height: 54px; border-radius: 16px; border: none;
+      background: linear-gradient(135deg, #7C5CFC, #FC5C9C);
+      color: #fff; font-family: 'Nunito', sans-serif;
+      font-size: 17px; font-weight: 900; cursor: pointer;
+      box-shadow: 0 6px 24px rgba(124,92,252,.35);
+    }
+
+    /* Confirm modal */
+    .confirm-bg {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.7);
+      backdrop-filter: blur(10px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 998; padding: 24px;
+    }
+    .confirm-bg.hidden { display: none; }
+    .confirm-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px 24px;
+      width: 100%; max-width: 320px;
+      text-align: center;
+      animation: popIn .3s cubic-bezier(.34,1.56,.64,1);
+    }
+    .confirm-icon { font-size: 36px; margin-bottom: 10px; }
+    .confirm-title { font-size: 18px; font-weight: 900; margin-bottom: 6px; }
+    .confirm-sub { font-size: 13px; color: var(--muted); font-weight: 700; margin-bottom: 20px; }
+    .confirm-btns { display: flex; gap: 10px; }
+    .confirm-no {
+      flex: 1; height: 48px; border-radius: 12px; border: 1px solid var(--border);
+      background: transparent; color: var(--muted);
+      font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800; cursor: pointer;
+    }
+    .confirm-yes {
+      flex: 1; height: 48px; border-radius: 12px; border: none;
+      background: #FF4B6E; color: #fff;
+      font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ░░░ SCREEN 1: START ░░░ -->
+<div id="start-screen" class="screen">
+  <div class="logo-wrap">
+    <span class="logo-emoji">
+      <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="4" y="4" width="44" height="44" rx="12" fill="url(#dg)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+        <circle cx="17" cy="17" r="4" fill="white" fill-opacity="0.9"/>
+        <circle cx="35" cy="17" r="4" fill="white" fill-opacity="0.9"/>
+        <circle cx="17" cy="35" r="4" fill="white" fill-opacity="0.9"/>
+        <circle cx="35" cy="35" r="4" fill="white" fill-opacity="0.9"/>
+        <circle cx="26" cy="26" r="4" fill="white" fill-opacity="0.9"/>
+        <defs><linearGradient id="dg" x1="4" y1="4" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#7C5CFC"/><stop offset="1" stop-color="#FC5C9C"/>
+        </linearGradient></defs>
+      </svg>
+    </span>
+    <div class="logo-text">GOTCHA</div>
+    <div class="logo-sub">Random Shartlar O'yini</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Nechta savolli bo'lsin?</div>
+    <div class="count-grid">
+      <div class="count-btn sel" data-count="20" style="--glow-color: #7C5CFC;">
+        <span class="count-num">20</span>
+        <span class="count-label">Tezkor</span>
+      </div>
+      <div class="count-btn" data-count="30" style="--glow-color: #FC5C9C;">
+        <span class="count-num">30</span>
+        <span class="count-label">Standart</span>
+      </div>
+      <div class="count-btn" data-count="50" style="--glow-color: #3DDC84;">
+        <span class="count-num">50</span>
+        <span class="count-label">Katta davra</span>
+      </div>
+      <div class="count-btn" data-count="custom" style="--glow-color: #FFBE0B;">
+        <span class="count-num" id="custom-val">✏️</span>
+        <span class="count-label">Maxsus</span>
+      </div>
+    </div>
+  </div>
+
+  <button class="start-btn" id="btn-start">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-right:8px;vertical-align:middle"><polygon points="5 3 19 12 5 21 5 3"/></svg>O'yinni boshlash
+  </button>
+</div>
+
+<!-- ░░░ SCREEN 2: GAME ░░░ -->
+<div id="game-screen" class="screen hidden">
+  <canvas id="touch-canvas"></canvas>
+  <div class="g-header">
+    <div class="g-icon-btn" id="btn-home">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </div>
+    <div class="g-pill" id="question-counter">1 / 20</div>
+    <div style="width:40px"></div>
+  </div>
+</div>
+
+<!-- ░░░ SCREEN 3: CHALLENGE ░░░ -->
+<div id="challenge-screen" class="screen hidden">
+  <div class="ch-header">
+    <div class="g-icon-btn" id="btn-back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </div>
+    <div class="g-pill" id="ch-counter">1 / 20</div>
+    <div style="width:40px"></div>
+  </div>
+  <div class="ch-body">
+    <!-- Winner banner -->
+    <div class="winner-banner" id="winner-banner">
+      <div class="winner-banner-ring" id="winner-ring">
+        <svg id="winner-icon-svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+      </div>
+      <div class="winner-label">Shart bajaruvchi</div>
+    </div>
+
+    <!-- Challenge card -->
+    <div class="challenge-card">
+      <div class="cat-pill" id="cat-pill">⚡ Tezkor</div>
+      <div class="ch-title" id="ch-title">Sarlavha</div>
+      <div class="ch-desc" id="ch-desc">Tavsif</div>
+
+      <!-- Timed: begin button -->
+      <button class="begin-btn" id="btn-begin" style="display:none">▶ Shartni boshlash</button>
+
+      <!-- Timer display -->
+      <div class="timer-wrap" id="timer-wrap" style="display:none">
+        <div class="timer-ring-box">
+          <svg viewBox="0 0 100 100" width="100" height="100">
+            <circle class="t-bg" cx="50" cy="50" r="45"/>
+            <circle class="t-fg" id="t-fg" cx="50" cy="50" r="45" stroke="#7C5CFC"/>
+          </svg>
+          <div class="timer-num" id="timer-num">30</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="action-row" id="action-row">
+      <button class="act-btn btn-fail" id="btn-fail">✕ Yutqazdim</button>
+      <button class="act-btn btn-win" id="btn-win">✓ Tugatdim</button>
+    </div>
+
+    <!-- Next round button (after finish) -->
+    <button class="next-btn" id="btn-next" style="display:none">O'yinga qaytish ↩</button>
+  </div>
+</div>
+
+<!-- ░░░ CUSTOM COUNT MODAL ░░░ -->
+<div class="modal-bg hidden" id="custom-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Maxsus son</div>
+    <div class="modal-sub">3 dan 150 gacha son kiriting</div>
+    <input class="modal-input" type="number" id="custom-input" min="3" max="150" value="25" inputmode="numeric">
+    <div class="modal-btns">
+      <button class="modal-cancel" id="modal-cancel">Bekor</button>
+      <button class="modal-ok" id="modal-ok">Tasdiqlash</button>
+    </div>
+  </div>
+</div>
+
+<!-- ░░░ CONFIRM HOME MODAL ░░░ -->
+<div class="confirm-bg hidden" id="confirm-modal">
+  <div class="confirm-card">
+    <div class="confirm-icon">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </div>
+    <div class="confirm-title">Bosh menyuga qaytasizmi?</div>
+    <div class="confirm-sub">O'yin tarixingiz o'chib ketadi</div>
+    <div class="confirm-btns">
+      <button class="confirm-no" id="confirm-no">Yo'q</button>
+      <button class="confirm-yes" id="confirm-yes">Ha, qaytish</button>
+    </div>
+  </div>
+</div>
+
+<!-- ░░░ GAME OVER MODAL ░░░ -->
+<div class="go-modal-bg hidden" id="go-modal">
+  <div class="go-card">
+    <div class="go-emoji">
+      <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="28" cy="28" r="28" fill="url(#gdg)"/>
+        <path d="M18 28l7 7 13-13" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <defs><linearGradient id="gdg" x1="0" y1="0" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#3DDC84"/><stop offset="1" stop-color="#00C6FF"/>
+        </linearGradient></defs>
+      </svg>
+    </div>
+    <div class="go-title">O'yin yakunlandi!</div>
+    <div class="go-sub" id="go-sub">Barcha shartlar muvaffaqiyatli bajarildi</div>
+    <button class="go-btn" id="go-btn">Qaytadan o'ynash</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+//  SOUND ENGINE (Web Audio, no files)
+// ═══════════════════════════════════════
+let _actx;
+function getACtx() {
+  if (!_actx) _actx = new (window.AudioContext || window.webkitAudioContext)();
+  return _actx;
+}
+// ── BUBBLE POP synthesizer ──
+// Classic bubble: sine freq sweeps HIGH→LOW very fast = natural pop
+function pop(vol) {
+  try {
+    const ctx = getACtx();
+    if (ctx.state === 'suspended') ctx.resume();
+    const now = ctx.currentTime;
+    const startF = 500 + Math.random() * 500; // 500-1000 Hz, random each pop
+    const endF   = startF * 0.25;              // drop to 25% of start
+    const dur    = 0.07 + Math.random() * 0.04;
+
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(startF, now);
+    o.frequency.exponentialRampToValueAtTime(endF, now + dur);
+    g.gain.setValueAtTime(vol || 0.14, now);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(now); o.stop(now + dur + 0.01);
+  } catch(e) {}
+}
+
+// ── Chime helper (winner / done / alarm) ──
+function chime(freq, vol, delay) {
+  try {
+    const ctx = getACtx();
+    if (ctx.state === 'suspended') ctx.resume();
+    const t0 = ctx.currentTime + (delay || 0);
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = 'sine';
+    o.frequency.value = freq;
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(vol, t0 + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.5);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(t0); o.stop(t0 + 0.52);
+  } catch(e) {}
+}
+
+const SFX = {
+  tap:    () => pop(0.14),
+  tick:   () => pop(0.05),   // very quiet pop for each countdown second
+  select: () => {             // winner: 3 rising chimes
+    chime(880,  0.07, 0.00);
+    chime(1108, 0.07, 0.13);
+    chime(1318, 0.09, 0.26);
+  },
+  alarm: () => {
+    chime(659, 0.07, 0.00);
+    chime(494, 0.06, 0.25);
+  },
+  done: () => {
+    chime(880,  0.07, 0.00);
+    chime(1174, 0.07, 0.14);
+  },
+  fail: () => pop(0.1),
+};
+
+// ═══════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════
+const allQuestions = [{"id":"q_0777","type":"challenge","category":"friends","title":"Maqtov zanjiri","description":"O'ng tomoningdagi odamga bitta samimiy kompliment ayt, u keyingisiga davom ettirsin. Biror aniq misol keltir.","duration":null,"time_limit":false,"difficulty":"easy","players":"single","tags":["friends","social","positive"],"language":"uz","is_active":true},{"id":"q_0508","type":"question","category":"question","title":"Qiziqarli savol 23","description":"Qaysi film yoki kitob senga kuchli taassurot qoldirgan? Boshqalardan ham shu savolga javob so'ra.","duration":null,"time_limit":false,"difficulty":"easy","players":"group","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0896","type":"challenge","category":"creative","title":"Kelajakdagi o'zing","description":"10 yildan keyingi o'zingga qisqa audio xabar kabi murojaat qil. Oxirida nima uchun bu g'oya foydali ekanini ayt.","duration":null,"time_limit":false,"difficulty":"medium","players":"single","tags":["creative","imagination","thinking"],"language":"uz","is_active":true},{"id":"q_0923","type":"challenge","category":"creative","title":"Yangi sport","description":"Yangi sport turi o'ylab top: qoidalari va g'alaba shartini tushuntir. Boshqalardan bitta tasodifiy so'z ol va ishlat.","duration":45,"time_limit":true,"difficulty":"medium","players":"group","tags":["creative","imagination","thinking"],"language":"uz","is_active":true},{"id":"q_0034","type":"challenge","category":"quick","title":"Hayvonlar: tezkor ro'yxat","description":"20 soniya ichida 9 ta hayvonlar nomini ayt. Bir xil javobni takrorlama.","duration":20,"time_limit":true,"difficulty":"medium","players":"single","tags":["quick","memory","timed"],"language":"uz","is_active":true},{"id":"q_0484","type":"question","category":"question","title":"Qiziqarli savol 19","description":"Kayfiyatingni tez ko'taradigan qo'shiq yoki musiqa turi qaysi? Boshqalardan ham shu savolga javob so'ra.","duration":null,"time_limit":false,"difficulty":"medium","players":"group","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0086","type":"challenge","category":"quick","title":"Sport turlari: tezkor ro'yxat","description":"10 soniya ichida 5 ta sport turlari nomini ayt. Bir xil javobni takrorlama.","duration":10,"time_limit":true,"difficulty":"easy","players":"single","tags":["quick","memory","timed"],"language":"uz","is_active":true},{"id":"q_0751","type":"challenge","category":"friends","title":"Jamoa nomi","description":"Hamma uchun kulgili jamoa nomini o'ylab top.","duration":20,"time_limit":true,"difficulty":"easy","players":"single","tags":["friends","social","positive"],"language":"uz","is_active":true},{"id":"q_0355","type":"challenge","category":"funny","title":"Telenovella","description":"Oddiy bir gapni juda dramatik serial qahramonidek ayt go'yo katta sahnada turgandek.","duration":null,"time_limit":false,"difficulty":"easy","players":"single","tags":["funny","acting","creative"],"language":"uz","is_active":true},{"id":"q_0524","type":"question","category":"question","title":"Qiziqarli savol 26","description":"O'zing haqingda ko'pchilik bilmaydigan qiziq, oddiy fakt ayt. Javob berayotganda eng birinchi xayolingga kelgan fikrni ayt.","duration":null,"time_limit":false,"difficulty":"easy","players":"single","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0185","type":"challenge","category":"funny","title":"Robot rejimi","description":"20 soniya davomida robot kabi gapir go'yo katta sahnada turgandek. Har bir gapdan keyin kichik robot tovushini qo'sh.","duration":20,"time_limit":true,"difficulty":"easy","players":"single","tags":["funny","acting","creative"],"language":"uz","is_active":true},{"id":"q_0810","type":"challenge","category":"friends","title":"Yangi tanishuv","description":"O'zingni davradagi bir odam bilan birinchi marta tanishayotgandek tanishtir. Javobni hamma eshitadigan qilib ayt.","duration":20,"time_limit":true,"difficulty":"easy","players":"single","tags":["friends","social","positive"],"language":"uz","is_active":true},{"id":"q_0419","type":"question","category":"question","title":"Qiziqarli savol 9","description":"Bir kun davomida telefon ishlatmasang, vaqtni qanday o'tkazarding?","duration":null,"time_limit":false,"difficulty":"easy","players":"single","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0616","type":"challenge","category":"acting","title":"Haykal","description":"Boshqalar aytgan mavzuga mos haykal holatida 10 soniya qotib tur. Boshqa odamning yordamisiz bajar.","duration":10,"time_limit":true,"difficulty":"easy","players":"single","tags":["acting","mimicry","performance"],"language":"uz","is_active":true},{"id":"q_0683","type":"challenge","category":"acting","title":"Robot raqsi","description":"Biroz vaqt davomida robotga o'xshash kulgili raqs harakatlarini qil. Buni kulgili, lekin odobli tarzda bajar.","duration":20,"time_limit":true,"difficulty":"easy","players":"single","tags":["acting","mimicry","performance"],"language":"uz","is_active":true},{"id":"q_0502","type":"question","category":"question","title":"Qiziqarli savol 22","description":"Biror narsani o'zgartirish imkoning bo'lsa, maktab yoki ish kunida nimani o'zgartirarding? Boshqalardan ham shu savolga javob so'ra.","duration":null,"time_limit":false,"difficulty":"medium","players":"group","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0761","type":"challenge","category":"friends","title":"Do'stlik savoli","description":"Davradagilardan biriga: 'Birga qaysi yangi mashg'ulotni sinab ko'rsak bo'ladi?' deb so'ra.","duration":null,"time_limit":false,"difficulty":"easy","players":"single","tags":["friends","social","positive"],"language":"uz","is_active":true},{"id":"q_0050","type":"challenge","category":"quick","title":"Davlatlar: tezkor ro'yxat","description":"10 soniya ichida 6 ta davlatlar nomini ayt. Bir xil javobni takrorlama.","duration":10,"time_limit":true,"difficulty":"easy","players":"single","tags":["quick","memory","timed"],"language":"uz","is_active":true},{"id":"q_0733","type":"challenge","category":"friends","title":"Umumiy xotira","description":"Davradagi kim bilandir bog'liq kulgili yoki yoqimli umumiy xotirani ayt. Samimiy va hurmat bilan bajar.","duration":null,"time_limit":false,"difficulty":"easy","players":"single","tags":["friends","social","positive"],"language":"uz","is_active":true},{"id":"q_0337","type":"challenge","category":"funny","title":"Ajoyib kashfiyot","description":"Oddiy buyumdan qanday ajoyib ixtiro qilish mumkinligini kulgili tarzda tushuntir sekin va tantanali tarzda.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["funny","acting","creative"],"language":"uz","is_active":true},{"id":"q_0451","type":"question","category":"question","title":"Qiziqarli savol 14","description":"Agar biror tarixiy davrga mehmon bo'lib bora olsang, qaysi davrni tanlarding? Javobingga sabab ham ayt.","duration":null,"time_limit":false,"difficulty":"easy","players":"single","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0791","type":"challenge","category":"friends","title":"Birgalikdagi reja","description":"Davradagi bir kishi bilan amalga oshirish mumkin bo'lgan qiziqarli reja taklif qil.","duration":null,"time_limit":false,"difficulty":"medium","players":"single","tags":["friends","social","positive"],"language":"uz","is_active":true},{"id":"q_0351","type":"challenge","category":"funny","title":"Telenovella","description":"Oddiy bir gapni juda dramatik serial qahramonidek ayt juda jiddiy ohangda.","duration":15,"time_limit":true,"difficulty":"easy","players":"single","tags":["funny","acting","creative"],"language":"uz","is_active":true},{"id":"q_0468","type":"question","category":"question","title":"Qiziqarli savol 17","description":"Seningcha, yaxshi do'stning eng muhim xususiyati nima? Javobingni bitta misol bilan tushuntir.","duration":null,"time_limit":false,"difficulty":"easy","players":"single","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0623","type":"challenge","category":"acting","title":"Ertak qahramoni","description":"O'zing yoqtirgan ertak qahramonini ovozi va harakati bilan ko'rsat. Buni kulgili, lekin odobli tarzda bajar.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["acting","mimicry","performance"],"language":"uz","is_active":true},{"id":"q_0477","type":"question","category":"question","title":"Qiziqarli savol 18","description":"Agar o'zingga 10 yil oldingi holatingga maslahat bera olsang, nima derding? Javobingni qisqa va aniq ifodala.","duration":null,"time_limit":false,"difficulty":"easy","players":"single","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0615","type":"challenge","category":"acting","title":"Haykal","description":"Boshqalar aytgan mavzuga mos haykal holatida 10 soniya qotib tur. Davradagilardan biri mavzuni tanlasin.","duration":10,"time_limit":true,"difficulty":"easy","players":"single","tags":["acting","mimicry","performance"],"language":"uz","is_active":true},{"id":"q_0555","type":"challenge","category":"acting","title":"Hayvonni top","description":"Biror uy hayvonini gapirmasdan harakat bilan ko'rsat. Boshqalar topsin.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["acting","mimicry","performance"],"language":"uz","is_active":true},{"id":"q_0366","type":"challenge","category":"funny","title":"Maxfiy agent","description":"O'zingni maxfiy agentdek tanishtir va bugungi xayoliy vazifangni ayt shoshilinch vaziyatdagidek.","duration":25,"time_limit":true,"difficulty":"medium","players":"single","tags":["funny","acting","creative"],"language":"uz","is_active":true},{"id":"q_0771","type":"challenge","category":"friends","title":"Maqtov zanjiri","description":"O'ng tomoningdagi odamga bitta samimiy kompliment ayt, u keyingisiga davom ettirsin.","duration":null,"time_limit":false,"difficulty":"easy","players":"single","tags":["friends","social","positive"],"language":"uz","is_active":true},{"id":"q_0631","type":"challenge","category":"acting","title":"Kasb intervyusi","description":"Xayoliy kasb egasi roliga kirib, o'zingni tanishtir.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["acting","mimicry","performance"],"language":"uz","is_active":true},{"id":"q_0941","type":"challenge","category":"creative","title":"Bir jumlalik film","description":"Faqat bitta jumla bilan qiziqarli film syujetini o'ylab top.","duration":20,"time_limit":true,"difficulty":"easy","players":"single","tags":["creative","imagination","thinking"],"language":"uz","is_active":true},{"id":"q_0798","type":"challenge","category":"friends","title":"Birgalikdagi reja","description":"Davradagi bir kishi bilan amalga oshirish mumkin bo'lgan qiziqarli reja taklif qil. Buni tabassumli ohangda ayt.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["friends","social","positive"],"language":"uz","is_active":true},{"id":"q_0497","type":"question","category":"question","title":"Qiziqarli savol 22","description":"Biror narsani o'zgartirish imkoning bo'lsa, maktab yoki ish kunida nimani o'zgartirarding?","duration":null,"time_limit":false,"difficulty":"medium","players":"single","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0925","type":"challenge","category":"creative","title":"Yangi sport","description":"Yangi sport turi o'ylab top: qoidalari va g'alaba shartini tushuntir. Buni xuddi taqdimot qilayotgandek tushuntir.","duration":45,"time_limit":true,"difficulty":"medium","players":"single","tags":["creative","imagination","thinking"],"language":"uz","is_active":true},{"id":"q_0370","type":"challenge","category":"funny","title":"Maxfiy agent","description":"O'zingni maxfiy agentdek tanishtir va bugungi xayoliy vazifangni ayt o'zingga xos uslubda.","duration":25,"time_limit":true,"difficulty":"medium","players":"single","tags":["funny","acting","creative"],"language":"uz","is_active":true},{"id":"q_0597","type":"challenge","category":"acting","title":"Jim kino","description":"Suv ichish yoki kitob o'qishni ovozsiz sahna qilib ko'rsat. Imkon qadar tabiiy chiqishga harakat qil.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["acting","mimicry","performance"],"language":"uz","is_active":true},{"id":"q_0721","type":"challenge","category":"friends","title":"Kulgili laqab","description":"Biror do'stingga hurmatli va yoqimli kulgili laqab top, sababini tushuntir.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["friends","social","positive"],"language":"uz","is_active":true},{"id":"q_0054","type":"challenge","category":"quick","title":"Kasblar: tezkor ro'yxat","description":"20 soniya ichida 10 ta kasblar nomini ayt. Bir xil javobni takrorlama.","duration":20,"time_limit":true,"difficulty":"medium","players":"single","tags":["quick","memory","timed"],"language":"uz","is_active":true},{"id":"q_0427","type":"question","category":"question","title":"Qiziqarli savol 10","description":"Eng kulgili tasodifiy vaziyatlardan birini eslab ayt. Javobingga sabab ham ayt.","duration":null,"time_limit":false,"difficulty":"medium","players":"single","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0057","type":"challenge","category":"quick","title":"Kasblar: tezkor ro'yxat","description":"15 soniya ichida 6 ta kasblar nomini ayt. Bir xil javobni takrorlama.","duration":15,"time_limit":true,"difficulty":"easy","players":"single","tags":["quick","memory","timed"],"language":"uz","is_active":true},{"id":"q_0265","type":"challenge","category":"funny","title":"Hayron qolgan odam","description":"Kimdir senga oddiy qoshiqni dunyodagi eng katta yangilikdek ko'rsatgandek munosabat bildir.","duration":20,"time_limit":true,"difficulty":"easy","players":"single","tags":["funny","acting","creative"],"language":"uz","is_active":true},{"id":"q_0175","type":"challenge","category":"funny","title":"Reklama yulduzi","description":"Yonindagi oddiy buyumni tanla va uni eng zo'r ixtirodek 20 soniya reklama qil.","duration":20,"time_limit":true,"difficulty":"easy","players":"single","tags":["funny","acting","creative"],"language":"uz","is_active":true},{"id":"q_0151","type":"challenge","category":"quick","title":"Maktab buyumlari: tezkor ro'yxat","description":"30 soniya ichida 10 ta maktab buyumlari nomini ayt. Bir xil javobni takrorlama.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["quick","memory","timed"],"language":"uz","is_active":true},{"id":"q_0742","type":"challenge","category":"friends","title":"Bir so'zli ta'rif","description":"Davradagi bir kishini bitta ijobiy so'z bilan ta'rifla va sababini ayt. Ismni aytib murojaat qil.","duration":20,"time_limit":true,"difficulty":"easy","players":"single","tags":["friends","social","positive"],"language":"uz","is_active":true},{"id":"q_0114","type":"challenge","category":"quick","title":"Ichimliklar: tezkor ro'yxat","description":"20 soniya ichida 12 ta ichimliklar nomini ayt. Bir xil javobni takrorlama.","duration":20,"time_limit":true,"difficulty":"hard","players":"single","tags":["quick","memory","timed"],"language":"uz","is_active":true},{"id":"q_0966","type":"challenge","category":"creative","title":"Xayoliy sayyora","description":"Yangi sayyora nomini, undagi bitta g'alati qonunni va bir odatini tasvirla.","duration":45,"time_limit":true,"difficulty":"medium","players":"single","tags":["creative","imagination","thinking"],"language":"uz","is_active":true},{"id":"q_0019","type":"challenge","category":"quick","title":"Hayvonlar: tezkor ro'yxat","description":"15 soniya ichida 7 ta hayvonlar nomini ayt. Bir xil javobni takrorlama.","duration":15,"time_limit":true,"difficulty":"easy","players":"single","tags":["quick","memory","timed"],"language":"uz","is_active":true},{"id":"q_0190","type":"challenge","category":"funny","title":"Robot rejimi","description":"20 soniya davomida robot kabi gapir o'zingga xos uslubda. Har bir gapdan keyin kichik robot tovushini qo'sh.","duration":20,"time_limit":true,"difficulty":"easy","players":"single","tags":["funny","acting","creative"],"language":"uz","is_active":true},{"id":"q_0415","type":"question","category":"question","title":"Qiziqarli savol 8","description":"Senga eng yoqadigan fasl qaysi va nima uchun? Javobingga sabab ham ayt.","duration":null,"time_limit":false,"difficulty":"easy","players":"single","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0590","type":"challenge","category":"acting","title":"Kayfiyat almashinuvi","description":"Bir xil jumlani xursand, hayron va juda charchagan odamdek uch xil ayt.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["acting","mimicry","performance"],"language":"uz","is_active":true},{"id":"q_0667","type":"challenge","category":"acting","title":"Sekin harakat","description":"Xonadagi bir joydan ikkinchi joyga go'yo vaqt juda sekin o'tayotgandek yur.","duration":20,"time_limit":true,"difficulty":"easy","players":"single","tags":["acting","mimicry","performance"],"language":"uz","is_active":true},{"id":"q_0222","type":"challenge","category":"funny","title":"Kutilmagan intervyu","description":"O'zingdan intervyu ol: ham savol ber, ham javob ber quvnoq ohangda. 3 ta savol bo'lsin.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["funny","acting","creative"],"language":"uz","is_active":true},{"id":"q_0300","type":"challenge","category":"funny","title":"Ertakchi","description":"Xonadagi uchta buyumni qatnashtirib, qisqa kichik ertak to'qib ber.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["funny","acting","creative"],"language":"uz","is_active":true},{"id":"q_0387","type":"question","category":"question","title":"Qiziqarli savol 3","description":"Agar hozir istalgan shaharga sayohat qila olsang, qayerga borarding? Javobingni qisqa va aniq ifodala.","duration":null,"time_limit":false,"difficulty":"easy","players":"single","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0880","type":"challenge","category":"creative","title":"Yangi bayram","description":"O'zing yangi bayram o'ylab top: nomi, sanasi va qanday nishonlanishini ayt.","duration":45,"time_limit":true,"difficulty":"medium","players":"single","tags":["creative","imagination","thinking"],"language":"uz","is_active":true},{"id":"q_0017","type":"challenge","category":"quick","title":"Mevalar: tezkor ro'yxat","description":"20 soniya ichida 9 ta mevalar nomini ayt. Bir xil javobni takrorlama.","duration":20,"time_limit":true,"difficulty":"medium","players":"single","tags":["quick","memory","timed"],"language":"uz","is_active":true},{"id":"q_0203","type":"challenge","category":"funny","title":"Sekinlashtirilgan film","description":"Oddiy bir ishni, masalan, suv ichishni, xuddi sekinlashtirilgan filmdek tasvirlab ber.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["funny","acting","creative"],"language":"uz","is_active":true},{"id":"q_0002","type":"challenge","category":"quick","title":"Mevalar: tezkor ro'yxat","description":"15 soniya ichida 7 ta mevalar nomini ayt. Bir xil javobni takrorlama.","duration":15,"time_limit":true,"difficulty":"easy","players":"single","tags":["quick","memory","timed"],"language":"uz","is_active":true},{"id":"q_0039","type":"challenge","category":"quick","title":"Davlatlar: tezkor ro'yxat","description":"30 soniya ichida 15 ta davlatlar nomini ayt. Bir xil javobni takrorlama.","duration":30,"time_limit":true,"difficulty":"hard","players":"single","tags":["quick","memory","timed"],"language":"uz","is_active":true},{"id":"q_0494","type":"question","category":"question","title":"Qiziqarli savol 21","description":"Senga berilgan eng foydali maslahat qaysi?","duration":null,"time_limit":false,"difficulty":"easy","players":"single","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0248","type":"challenge","category":"funny","title":"Jiddiy yangilik","description":"Xonada hozir bo'layotgan oddiy holatni shoshilinch yangilikdek e'lon qil.","duration":25,"time_limit":true,"difficulty":"medium","players":"single","tags":["funny","acting","creative"],"language":"uz","is_active":true},{"id":"q_0507","type":"question","category":"question","title":"Qiziqarli savol 23","description":"Qaysi film yoki kitob senga kuchli taassurot qoldirgan?","duration":null,"time_limit":false,"difficulty":"easy","players":"single","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0509","type":"question","category":"question","title":"Qiziqarli savol 24","description":"Agar bir kun mashhur ixtirochi bo'lsang, nimani yaratarding?","duration":null,"time_limit":false,"difficulty":"easy","players":"single","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0539","type":"question","category":"question","title":"Qiziqarli savol 29","description":"Seni kuldirishning eng oson yo'li nima?","duration":null,"time_limit":false,"difficulty":"easy","players":"single","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0025","type":"challenge","category":"quick","title":"Hayvonlar: tezkor ro'yxat","description":"10 soniya ichida 4 ta hayvonlar nomini ayt. Bir xil javobni takrorlama.","duration":10,"time_limit":true,"difficulty":"easy","players":"single","tags":["quick","memory","timed"],"language":"uz","is_active":true},{"id":"q_0695","type":"challenge","category":"acting","title":"Ovozli obraz","description":"Biror multfilm qahramoniga o'xshash ovozda o'zing haqingda ikki gap ayt.","duration":20,"time_limit":true,"difficulty":"easy","players":"single","tags":["acting","mimicry","performance"],"language":"uz","is_active":true},{"id":"q_0211","type":"challenge","category":"funny","title":"Hashamatli taqdimot","description":"Oddiy ruchkani juda qimmat va noyob mahsulotdek tanishtir juda jiddiy ohangda.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["funny","acting","creative"],"language":"uz","is_active":true},{"id":"q_0425","type":"question","category":"question","title":"Qiziqarli savol 10","description":"Eng kulgili tasodifiy vaziyatlardan birini eslab ayt.","duration":null,"time_limit":false,"difficulty":"medium","players":"single","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0529","type":"question","category":"question","title":"Qiziqarli savol 27","description":"Agar uchta tilni bemalol bilish imkoning bo'lsa, qaysilarini tanlarding?","duration":null,"time_limit":false,"difficulty":"easy","players":"single","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0608","type":"challenge","category":"acting","title":"Mashhur sport","description":"Biror sport turini jihozlarsiz, faqat harakat bilan ko'rsat.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["acting","mimicry","performance"],"language":"uz","is_active":true},{"id":"q_0283","type":"challenge","category":"funny","title":"Sport sharhlovchisi","description":"Biror kishining oddiy yurishini sport musobaqasi sharhlovchisidek tasvirla.","duration":25,"time_limit":true,"difficulty":"medium","players":"single","tags":["funny","acting","creative"],"language":"uz","is_active":true},{"id":"q_0940","type":"challenge","category":"creative","title":"Sehrli qobiliyat","description":"Juda oddiy, lekin kulgili super kuch o'ylab top va qachon ishlatishingni ayt.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["creative","imagination","thinking"],"language":"uz","is_active":true},{"id":"q_0945","type":"challenge","category":"creative","title":"Bir jumlalik film","description":"Faqat bitta jumla bilan qiziqarli film syujetini o'ylab top.","duration":20,"time_limit":true,"difficulty":"easy","players":"single","tags":["creative","imagination","thinking"],"language":"uz","is_active":true},{"id":"q_0960","type":"challenge","category":"creative","title":"Restoran konsepti","description":"G'alati, ammo qiziqarli restoran nomi va uning asosiy taomini o'ylab top.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["creative","imagination","thinking"],"language":"uz","is_active":true},{"id":"q_0317","type":"challenge","category":"funny","title":"Sirli qahramon","description":"O'zingni sirli qahramondek tanishtir, lekin super kuching juda oddiy bo'lsin.","duration":25,"time_limit":true,"difficulty":"medium","players":"single","tags":["funny","acting","creative"],"language":"uz","is_active":true},{"id":"q_0561","type":"challenge","category":"acting","title":"Kasbni ko'rsat","description":"Biror kasb egasining kundalik ishini gapirmasdan ko'rsat. Boshqalar kasbni topsin.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["acting","mimicry","performance"],"language":"uz","is_active":true},{"id":"q_0326","type":"challenge","category":"funny","title":"Qo'shiqchi boshlovchi","description":"Ismingni qo'shiq ohangida aytib, o'zingni tanishtir.","duration":15,"time_limit":true,"difficulty":"easy","players":"single","tags":["funny","acting","creative"],"language":"uz","is_active":true},{"id":"q_0824","type":"challenge","category":"friends","title":"Jamoaviy hikoya","description":"Hamma navbat bilan bittadan gap qo'shib hikoya tuzishni boshlash uchun birinchi gapni ayt.","duration":null,"time_limit":false,"difficulty":"easy","players":"single","tags":["friends","social","positive"],"language":"uz","is_active":true},{"id":"q_0714","type":"challenge","category":"friends","title":"Minnatdorchilik","description":"Davradagi bir kishiga u qilgan kichik yaxshiligi uchun rahmat ayt.","duration":20,"time_limit":true,"difficulty":"easy","players":"single","tags":["friends","social","positive"],"language":"uz","is_active":true},{"id":"q_0820","type":"challenge","category":"friends","title":"Yaxshi tilak","description":"Davradagi bir kishiga kelgusi hafta uchun yaxshi tilak bildir.","duration":15,"time_limit":true,"difficulty":"easy","players":"single","tags":["friends","social","positive"],"language":"uz","is_active":true},{"id":"q_0199","type":"challenge","category":"funny","title":"Ob-havo boshlovchisi","description":"Xonadagi kayfiyatni ob-havo ma'lumotidek jiddiy ohangda e'lon qil.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["funny","acting","creative"],"language":"uz","is_active":true},{"id":"q_0661","type":"challenge","category":"acting","title":"Sekin harakat","description":"Xonadagi bir joydan ikkinchi joyga go'yo vaqt juda sekin o'tayotgandek yur.","duration":20,"time_limit":true,"difficulty":"easy","players":"single","tags":["acting","mimicry","performance"],"language":"uz","is_active":true},{"id":"q_0375","type":"question","category":"question","title":"Qiziqarli savol 1","description":"Agar bir kun istalgan kasbni sinab ko'rish imkoning bo'lsa, qaysi kasbni tanlarding va nima uchun?","duration":null,"time_limit":false,"difficulty":"medium","players":"single","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0517","type":"question","category":"question","title":"Qiziqarli savol 25","description":"Seningcha, ideal dam olish kuni qanday o'tadi?","duration":null,"time_limit":false,"difficulty":"medium","players":"single","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0437","type":"question","category":"question","title":"Qiziqarli savol 12","description":"Qaysi kichik yutuqing seni xursand qilgan?","duration":null,"time_limit":false,"difficulty":"easy","players":"single","tags":["question","conversation","friends"],"language":"uz","is_active":true},{"id":"q_0029","type":"challenge","category":"quick","title":"Hayvonlar: tezkor ro'yxat","description":"20 soniya ichida 12 ta hayvonlar nomini ayt. Bir xil javobni takrorlama.","duration":20,"time_limit":true,"difficulty":"hard","players":"single","tags":["quick","memory","timed"],"language":"uz","is_active":true},{"id":"q_0912","type":"challenge","category":"creative","title":"Mini ertak","description":"Ikki buyum va bitta hayvon qatnashgan qisqa ertak to'qib ber.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["creative","imagination","thinking"],"language":"uz","is_active":true},{"id":"q_0150","type":"challenge","category":"quick","title":"Maktab buyumlari: tezkor ro'yxat","description":"30 soniya ichida 8 ta maktab buyumlari nomini ayt. Bir xil javobni takrorlama.","duration":30,"time_limit":true,"difficulty":"medium","players":"single","tags":["quick","memory","timed"],"language":"uz","is_active":true}];
+
+// ═══════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════
+let selectedCount = 20;
+let sessionQuestions = [];
+let currentIndex = 0;
+let currentQuestion = null;
+let customCountSet = false;
+
+// ═══════════════════════════════════════
+//  SCREEN SWITCHING
+// ═══════════════════════════════════════
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
+// ═══════════════════════════════════════
+//  START SCREEN
+// ═══════════════════════════════════════
+document.querySelectorAll('.count-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    SFX.tap();
+    const v = btn.dataset.count;
+    if (v === 'custom') {
+      document.getElementById('custom-modal').classList.remove('hidden');
+      setTimeout(() => document.getElementById('custom-input').focus(), 50);
+      return;
+    }
+    document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('sel'));
+    btn.classList.add('sel');
+    selectedCount = parseInt(v);
+    customCountSet = false;
+  });
+});
+
+document.getElementById('modal-cancel').onclick = () => {
+  document.getElementById('custom-modal').classList.add('hidden');
+};
+document.getElementById('modal-ok').onclick = () => {
+  const v = parseInt(document.getElementById('custom-input').value);
+  if (v >= 3 && v <= 150) {
+    selectedCount = v;
+    document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('sel'));
+    const cb = document.querySelector('[data-count="custom"]');
+    cb.classList.add('sel');
+    cb.querySelector('.count-num').textContent = v;
+    customCountSet = true;
+    document.getElementById('custom-modal').classList.add('hidden');
+    SFX.tap();
+  }
+};
+document.getElementById('custom-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('custom-modal')) {
+    document.getElementById('custom-modal').classList.add('hidden');
+  }
+});
+
+document.getElementById('btn-start').onclick = () => {
+  SFX.select();
+  const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
+  sessionQuestions = shuffled.slice(0, Math.min(selectedCount, shuffled.length));
+  currentIndex = 0;
+  updateCounters();
+  show('game-screen');
+  resizeCanvas();
+  resetTouches();
+};
+
+// ═══════════════════════════════════════
+//  HOME CONFIRM MODAL
+// ═══════════════════════════════════════
+function confirmHome() {
+  document.getElementById('confirm-modal').classList.remove('hidden');
+}
+document.getElementById('confirm-no').onclick = () => {
+  document.getElementById('confirm-modal').classList.add('hidden');
+};
+document.getElementById('confirm-yes').onclick = () => {
+  document.getElementById('confirm-modal').classList.add('hidden');
+  stopTimer();
+  resetTouches();
+  show('start-screen');
+};
+document.getElementById('btn-home').onclick = confirmHome;
+
+document.getElementById('btn-back').onclick = () => {
+  stopTimer();
+  show('game-screen');
+  resetTouches();
+};
+
+function updateCounters() {
+  const t = `${currentIndex + 1} / ${sessionQuestions.length}`;
+  document.getElementById('question-counter').textContent = t;
+  document.getElementById('ch-counter').textContent = t;
+}
+
+// ═══════════════════════════════════════
+//  CANVAS / MULTI-TOUCH ENGINE
+// ═══════════════════════════════════════
+const canvas = document.getElementById('touch-canvas');
+const ctx = canvas.getContext('2d');
+
+// Vibrant palette — changes per touch, shifts on each new touch
+const PALETTE = [
+  '#FF4B6E', // coral red
+  '#7C5CFC', // violet
+  '#3DDC84', // green
+  '#FFBE0B', // amber
+  '#00C6FF', // sky blue
+  '#FF7A00', // orange
+  '#E040FB', // magenta
+  '#00E5FF', // cyan
+  '#76FF03', // lime
+  '#FF4081', // pink
+  '#F9A8D4', // rose
+  '#34D399', // emerald
+];
+let paletteOffset = 0;
+
+let touches = {};
+let holdTimer = null;
+let holdProgress = 0;
+let selectedId = null;
+let particles = [];
+let animReq;
+let animPhase = 0;
+
+// Winner expansion effect
+let winnerExpandRadius = 0;
+let winnerMaxRadius = 0;
+let winnerColor = '#7C5CFC';
+let winnerPos = { x: 0, y: 0 };
+let isExpanding = false;
+let expandOpacity = 1.0;
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+
+function assignColor() {
+  const used = new Set(Object.values(touches).map(t => t.color));
+  for (let i = 0; i < PALETTE.length; i++) {
+    const c = PALETTE[(paletteOffset + i) % PALETTE.length];
+    if (!used.has(c)) { paletteOffset = (paletteOffset + i + 1) % PALETTE.length; return c; }
+  }
+  paletteOffset = (paletteOffset + 1) % PALETTE.length;
+  return PALETTE[paletteOffset];
+}
+
+// Touch events
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  if (selectedId !== null) return;
+  for (const t of e.changedTouches) {
+    touches[t.identifier] = { x: t.clientX, y: t.clientY, color: assignColor(), scale: 0 };
+  }
+  SFX.tap();
+  checkHold();
+}, { passive: false });
+
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  for (const t of e.changedTouches) {
+    if (touches[t.identifier]) {
+      touches[t.identifier].x = t.clientX;
+      touches[t.identifier].y = t.clientY;
+    }
+  }
+}, { passive: false });
+
+canvas.addEventListener('touchend', e => {
+  e.preventDefault();
+  if (selectedId !== null) return;
+  for (const t of e.changedTouches) delete touches[t.identifier];
+  checkHold();
+}, { passive: false });
+
+canvas.addEventListener('touchcancel', e => {
+  e.preventDefault();
+  if (selectedId !== null) return;
+  for (const t of e.changedTouches) delete touches[t.identifier];
+  checkHold();
+}, { passive: false });
+
+// Mouse fallback (desktop testing)
+let mouseDown = false;
+canvas.addEventListener('mousedown', e => {
+  if (selectedId !== null) return;
+  mouseDown = true;
+  touches['m1'] = { x: e.clientX, y: e.clientY, color: assignColor(), scale: 0 };
+  touches['m2'] = { x: e.clientX + 90, y: e.clientY + 70, color: assignColor(), scale: 0 };
+  SFX.tap();
+  checkHold();
+});
+window.addEventListener('mouseup', () => {
+  if (mouseDown && selectedId === null) {
+    mouseDown = false;
+    delete touches['m1'];
+    delete touches['m2'];
+    checkHold();
+  }
+});
+
+function checkHold() {
+  const n = Object.keys(touches).length;
+  if (selectedId !== null) return;
+  if (n >= 2) {
+    if (!holdTimer) startHold();
+  } else {
+    resetHold();
+  }
+}
+
+function startHold() {
+  holdProgress = 0;
+  const total = 2200;
+  let elapsed = 0;
+  const step = 30;
+  holdTimer = setInterval(() => {
+    elapsed += step;
+    holdProgress = Math.min(1, elapsed / total);
+    if (elapsed % 300 === 0) SFX.tick();
+    if (elapsed >= total) { clearInterval(holdTimer); holdTimer = null; chooseWinner(); }
+  }, step);
+}
+
+function resetHold() {
+  clearInterval(holdTimer); holdTimer = null; holdProgress = 0;
+}
+
+function chooseWinner() {
+  const keys = Object.keys(touches);
+  if (!keys.length) return;
+  selectedId = keys[Math.floor(Math.random() * keys.length)];
+  SFX.select();
+
+  const w = touches[selectedId];
+  winnerColor = w.color;
+  winnerPos = { x: w.x, y: w.y };
+  
+  // Calculate distance to furthest screen corner to cover the entire screen
+  const corners = [
+    Math.hypot(w.x, w.y),
+    Math.hypot(canvas.width - w.x, w.y),
+    Math.hypot(w.x, canvas.height - w.y),
+    Math.hypot(canvas.width - w.x, canvas.height - w.y)
+  ];
+  winnerMaxRadius = Math.max(...corners) + 80;
+  winnerExpandRadius = 45;
+  expandOpacity = 1.0;
+  isExpanding = true;
+
+  // Burst particles
+  particles = [];
+  for (let i = 0; i < 40; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const s = 4 + Math.random() * 8;
+    particles.push({ x: w.x, y: w.y, vx: Math.cos(a)*s, vy: Math.sin(a)*s, color: '#FFFFFF', r: 3+Math.random()*4, alpha: 1 });
+  }
+
+  // Once expanded and faded out, open challenge screen
+  setTimeout(() => {
+    openChallenge();
+    isExpanding = false;
+  }, 1100);
+}
+
+function resetTouches() {
+  touches = {}; selectedId = null; holdProgress = 0; particles = [];
+  isExpanding = false;
+  winnerExpandRadius = 0;
+  expandOpacity = 1.0;
+  resetHold();
+}
+
+// ─── Render loop ───
+function render() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  animPhase += 0.025;
+
+  const keys = Object.keys(touches);
+
+  // Draw winner full-screen expanding circle transition
+  if (isExpanding) {
+    winnerExpandRadius += (winnerMaxRadius - winnerExpandRadius) * 0.12;
+    if (winnerExpandRadius > winnerMaxRadius * 0.5) {
+      expandOpacity = Math.max(0, expandOpacity - 0.04);
+    }
+    ctx.save();
+    ctx.globalAlpha = expandOpacity;
+    ctx.fillStyle = winnerColor;
+    ctx.beginPath();
+    ctx.arc(winnerPos.x, winnerPos.y, winnerExpandRadius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // Draw touches (fade them out as winner expands)
+  for (const key of keys) {
+    if (isExpanding && key !== selectedId) continue;
+    const t = touches[key];
+    // Pop-in scale
+    if (t.scale < 1) t.scale = Math.min(1, t.scale + 0.08);
+
+    const isSel = selectedId === key;
+    const isDim = selectedId !== null && !isSel;
+    const sc = t.scale;
+    const alpha = isDim ? 0.12 : 1;
+
+    ctx.save();
+    ctx.translate(t.x, t.y);
+    ctx.scale(sc, sc);
+    ctx.globalAlpha = alpha;
+
+    const r = isSel ? 46 : 38;
+    const pulse = isSel ? 6 + Math.sin(animPhase * 3) * 4 : Math.sin(animPhase + parseInt(key) * 0.9) * 5;
+
+    // Soft glow aura
+    const grad = ctx.createRadialGradient(0, 0, r * 0.5, 0, 0, r + 50 + pulse);
+    grad.addColorStop(0, t.color + '55');
+    grad.addColorStop(1, 'transparent');
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.arc(0, 0, r + 55 + pulse, 0, Math.PI * 2); ctx.fill();
+
+    // Outer ring
+    ctx.strokeStyle = t.color + 'AA';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.arc(0, 0, r + 14 + pulse, 0, Math.PI * 2); ctx.stroke();
+
+    // Core fill
+    ctx.fillStyle = isSel ? '#FFFFFF' : t.color;
+    ctx.shadowBlur = isSel ? 32 : 20;
+    ctx.shadowColor = t.color;
+    ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+    ctx.shadowBlur = 0;
+
+    ctx.restore();
+  }
+
+  // Particles
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx; p.y += p.vy; p.vy += 0.2;
+    p.alpha -= 0.018;
+    if (p.alpha <= 0) { particles.splice(i, 1); continue; }
+    ctx.globalAlpha = p.alpha;
+    ctx.fillStyle = p.color;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+
+  animReq = requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+// ═══════════════════════════════════════
+//  CHALLENGE SCREEN
+// ═══════════════════════════════════════
+const CAT = {
+  quick:    { name: 'Tezkor',    icon: '⚡', color: '#00C6FF' },
+  funny:    { name: 'Kulgili',   icon: '😄', color: '#FF4B6E' },
+  question: { name: 'Savol',     icon: '💬', color: '#A78BFA' },
+  acting:   { name: 'Aktyorlik', icon: '🎭', color: '#FFBE0B' },
+  friends:  { name: "Do'stlar",  icon: '🤝', color: '#3DDC84' },
+  creative: { name: 'Kreativ',   icon: '💡', color: '#FF7A00' },
+};
+
+function openChallenge() {
+  if (currentIndex >= sessionQuestions.length) {
+    document.getElementById('go-modal').classList.remove('hidden');
+    return;
+  }
+  currentQuestion = sessionQuestions[currentIndex];
+  updateCounters();
+
+  const cat = CAT[currentQuestion.category] || { name: 'Topshiriq', icon: '★', color: '#7C5CFC' };
+  const winnerTouch = touches[selectedId] || { color: cat.color };
+
+  // Winner banner
+  const banner = document.getElementById('winner-banner');
+  banner.style.setProperty('--winner-color', winnerTouch.color);
+  const ringEl = document.getElementById('winner-ring');
+  ringEl.style.background = winnerTouch.color;
+  ringEl.style.boxShadow = `0 0 24px ${winnerTouch.color}`;
+  // Update SVG icon per category
+  const catIcons = {
+    quick:    `<polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>`,
+    funny:    `<circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>`,
+    question: `<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>`,
+    acting:   `<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5-2 4-2 4 2 4 2"/><path d="M9 9h.01"/><path d="M15 9h.01"/>`,
+    friends:  `<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>`,
+    creative: `<line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/>`,
+  };
+  const svgPaths = catIcons[currentQuestion.category] || `<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>`;
+  document.getElementById('winner-icon-svg').innerHTML = svgPaths;
+
+  // Category pill
+  const pill = document.getElementById('cat-pill');
+  const catSvgs = {
+    quick:    `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
+    funny:    `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>`,
+    question: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`,
+    acting:   `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12C2 6.48 6.48 2 12 2s10 4.48 10 10-4.48 10-10 10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg>`,
+    friends:  `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+    creative: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>`,
+  };
+  const catSvg = catSvgs[currentQuestion.category] || catSvgs.creative;
+  pill.innerHTML = `${catSvg} ${cat.name}`;
+  pill.style.color = cat.color;
+  pill.style.borderColor = cat.color;
+  pill.style.background = cat.color + '15';
+
+  document.getElementById('ch-title').textContent = currentQuestion.title;
+  document.getElementById('ch-desc').textContent = currentQuestion.description;
+
+  const isTimed = currentQuestion.time_limit && currentQuestion.duration > 0;
+  const beginBtn = document.getElementById('btn-begin');
+  const timerWrap = document.getElementById('timer-wrap');
+  const actionRow = document.getElementById('action-row');
+  const nextBtn = document.getElementById('btn-next');
+
+  timerWrap.style.display = 'none';
+  nextBtn.style.display = 'none';
+  actionRow.style.display = 'flex';
+
+  if (isTimed) {
+    beginBtn.textContent = `▶ Shartni boshlash (${currentQuestion.duration}s)`;
+    beginBtn.style.display = 'block';
+    beginBtn.onclick = () => {
+      beginBtn.style.display = 'none';
+      timerWrap.style.display = 'flex';
+      startTimer(currentQuestion.duration);
+    };
+  } else {
+    beginBtn.style.display = 'none';
+  }
+
+  show('challenge-screen');
+}
+
+// ─── Timer ───
+let timerInterval = null;
+let timerRemain = 0;
+
+function startTimer(total) {
+  stopTimer();
+  timerRemain = total;
+  const circumference = 2 * Math.PI * 45; // r=45
+  const fgEl = document.getElementById('t-fg');
+  const numEl = document.getElementById('timer-num');
+  fgEl.style.strokeDasharray = circumference;
+  fgEl.style.strokeDashoffset = '0';
+  numEl.textContent = timerRemain;
+  fgEl.style.stroke = '#7C5CFC';
+  numEl.style.color = 'var(--text)';
+
+  timerInterval = setInterval(() => {
+    timerRemain--;
+    numEl.textContent = timerRemain;
+    const offset = circumference * (1 - timerRemain / total);
+    fgEl.style.strokeDashoffset = offset;
+    SFX.tick();
+    if (timerRemain <= 5) {
+      fgEl.style.stroke = '#FF4B6E';
+      numEl.style.color = '#FF4B6E';
+    }
+    if (timerRemain <= 0) { clearInterval(timerInterval); timerInterval = null; SFX.alarm(); autoFinish(); }
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval); timerInterval = null;
+}
+
+function autoFinish() {
+  document.getElementById('action-row').style.display = 'none';
+  document.getElementById('btn-next').textContent = '⏰ Vaqt tugadi — O\'yinga qaytish ↩';
+  document.getElementById('btn-next').style.display = 'block';
+  currentIndex++;
+}
+
+document.getElementById('btn-win').onclick = () => {
+  stopTimer(); SFX.done();
+  document.getElementById('action-row').style.display = 'none';
+  document.getElementById('btn-next').textContent = '✅ Bajarildi! O\'yinga qaytish ↩';
+  document.getElementById('btn-next').style.display = 'block';
+  currentIndex++;
+};
+document.getElementById('btn-fail').onclick = () => {
+  stopTimer(); SFX.fail();
+  document.getElementById('action-row').style.display = 'none';
+  document.getElementById('btn-next').textContent = 'O\'yinga qaytish ↩';
+  document.getElementById('btn-next').style.display = 'block';
+  currentIndex++;
+};
+
+document.getElementById('btn-next').onclick = () => {
+  if (currentIndex >= sessionQuestions.length) {
+    document.getElementById('go-modal').classList.remove('hidden');
+    return;
+  }
+  show('game-screen');
+  resetTouches();
+  updateCounters();
+};
+
+// ─── Game over ───
+document.getElementById('go-btn').onclick = () => {
+  document.getElementById('go-modal').classList.add('hidden');
+  stopTimer();
+  resetTouches();
+  show('start-screen');
+};
+</script>
+</body>
+</html>
