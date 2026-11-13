@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/question_service.dart';
-import '../widgets/neon_button.dart';
+import '../services/sound_service.dart';
 import 'gotcha_game_screen.dart';
 
 class StartScreen extends StatefulWidget {
@@ -14,6 +14,7 @@ class _StartScreenState extends State<StartScreen> {
   final QuestionService _questionService = QuestionService();
   int _selectedCount = 20;
   bool _isLoading = true;
+  bool _isCustom = false;
 
   @override
   void initState() {
@@ -30,316 +31,384 @@ class _StartScreenState extends State<StartScreen> {
     }
   }
 
-  void _showCustomCountDialog() {
+  void _showCustomDialog() {
     final textController = TextEditingController(text: _selectedCount.toString());
-    showDialog(
+    showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      backgroundColor: const Color(0xFF16161F),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
       builder: (context) {
-        return AlertDialog(
-          backgroundColor: const Color(0xFF141824),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-            side: const BorderSide(color: Color(0xFF00F0FF), width: 1.5),
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 24,
+            right: 24,
+            top: 20,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 30,
           ),
-          title: const Row(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.tune, color: Color(0xFF00F0FF)),
-              SizedBox(width: 10),
-              Text(
-                'Savollar sonini kiriting',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.white24,
+                  borderRadius: BorderRadius.circular(2),
                 ),
               ),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+              const SizedBox(height: 20),
               const Text(
-                'Davra uchun qulay bo\'lgan istalgan sonni kiriting (5 dan 100 gacha):',
-                style: TextStyle(color: Colors.white70, fontSize: 14),
+                'Maxsus son',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                  color: Color(0xFFF0F0FF),
+                ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 6),
+              const Text(
+                '3 dan 150 gacha son kiriting',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF6B6B8A),
+                ),
+              ),
+              const SizedBox(height: 20),
               TextField(
                 controller: textController,
                 keyboardType: TextInputType.number,
                 autofocus: true,
+                textAlign: TextAlign.center,
                 style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w900,
                   color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'Masalan: 15, 25, 40...',
-                  hintStyle: const TextStyle(color: Colors.white30, fontSize: 16),
                   filled: true,
-                  fillColor: const Color(0xFF1E2337),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFF00F0FF), width: 1.2),
+                  fillColor: const Color(0xFF1E1E2D),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(color: Colors.white10),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFFFF007F), width: 2),
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(color: Color(0xFF7C5CFC), width: 1.5),
                   ),
                 ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        side: const BorderSide(color: Colors.white10),
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Bekor', style: TextStyle(color: Color(0xFF6B6B8A), fontWeight: FontWeight.w800)),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    flex: 2,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        backgroundColor: const Color(0xFF7C5CFC),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      ),
+                      onPressed: () {
+                        final val = int.tryParse(textController.text);
+                        if (val != null && val >= 3 && val <= 150) {
+                          setState(() {
+                            _selectedCount = val;
+                            _isCustom = true;
+                          });
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: const Text('Tasdiqlash', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Bekor qilish', style: TextStyle(color: Colors.white54)),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF00F0FF),
-                foregroundColor: Colors.black,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              ),
-              onPressed: () {
-                final parsed = int.tryParse(textController.text.trim());
-                if (parsed != null && parsed >= 3 && parsed <= 200) {
-                  setState(() {
-                    _selectedCount = parsed;
-                  });
-                  Navigator.pop(context);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Iltimos, 3 dan 200 gacha son kiriting!'),
-                      backgroundColor: Colors.redAccent,
-                    ),
-                  );
-                }
-              },
-              child: const Text('Tasdiqlash', style: TextStyle(fontWeight: FontWeight.bold)),
-            ),
-          ],
         );
       },
     );
   }
 
-  void _startGame() {
-    _questionService.startNewGame(_selectedCount);
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const GotchaGameScreen()),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    const predefinedCounts = [20, 30, 50];
+    if (_isLoading) {
+      return const Scaffold(
+        backgroundColor: Color(0xFF0D0D14),
+        body: Center(
+          child: CircularProgressIndicator(color: Color(0xFF7C5CFC)),
+        ),
+      );
+    }
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0B0E17),
-      body: SafeArea(
-        child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF00F0FF)),
-                ),
-              )
-            : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                child: Column(
-                  children: [
-                    const Spacer(),
-
-                    // Neon Gotcha Title
-                    ShaderMask(
-                      shaderCallback: (bounds) => const LinearGradient(
-                        colors: [Color(0xFF00F0FF), Color(0xFFFF007F)],
-                      ).createShader(bounds),
-                      child: const Text(
-                        'GOTCHA',
-                        style: TextStyle(
-                          fontSize: 52,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.white,
-                          letterSpacing: 4,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF161B2E),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: const Color(0xFF00F0FF).withOpacity(0.3)),
-                      ),
-                      child: const Text(
-                        'Davralar uchun random shartlar',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 14,
-                          letterSpacing: 1.1,
-                        ),
-                      ),
-                    ),
-
-                    const Spacer(),
-
-                    // Question prompt container
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(22),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF131726),
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(
-                          color: const Color(0xFF00F0FF).withOpacity(0.3),
-                          width: 1.5,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF00F0FF).withOpacity(0.08),
-                            blurRadius: 25,
-                            spreadRadius: 2,
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'O\'yin nechta savolli bo\'lsin?',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          const Text(
-                            'Barcha savollar takrorlanmas va random tanlanadi',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white54,
-                              fontSize: 13,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-
-                          // 4 Choices: 20, 30, 50, Boshqa...
-                          Wrap(
-                            spacing: 12,
-                            runSpacing: 12,
-                            alignment: WrapAlignment.center,
-                            children: [
-                              ...predefinedCounts.map((count) {
-                                final isSelected = _selectedCount == count;
-                                return _buildCountChip(
-                                  label: '$count ta',
-                                  subLabel: count == 20
-                                      ? 'Tezkor'
-                                      : count == 30
-                                          ? 'Standart'
-                                          : 'Katta davra',
-                                  isSelected: isSelected,
-                                  onTap: () {
-                                    setState(() {
-                                      _selectedCount = count;
-                                    });
-                                  },
-                                );
-                              }),
-                              _buildCountChip(
-                                label: !predefinedCounts.contains(_selectedCount)
-                                    ? '$_selectedCount ta'
-                                    : 'Boshqa...',
-                                subLabel: !predefinedCounts.contains(_selectedCount)
-                                    ? 'Maxsus'
-                                    : 'O\'zingiz tanlang',
-                                isSelected: !predefinedCounts.contains(_selectedCount),
-                                isCustom: true,
-                                onTap: _showCustomCountDialog,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const Spacer(),
-
-                    // Start Game Button
-                    NeonButton(
-                      text: 'O\'yinni boshlash',
-                      icon: Icons.play_arrow_rounded,
-                      color: const Color(0xFF00FF87),
-                      height: 60,
-                      width: double.infinity,
-                      onPressed: _startGame,
-                    ),
-
-                    const SizedBox(height: 16),
+      backgroundColor: const Color(0xFF0D0D14),
+      body: Stack(
+        children: [
+          // Background soft glow
+          Positioned(
+            top: -100,
+            left: 50,
+            child: Container(
+              width: 300,
+              height: 300,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    const Color(0xFF7C5CFC).withOpacity(0.18),
+                    Colors.transparent,
                   ],
                 ),
               ),
+            ),
+          ),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(height: 20),
+                  // Logo
+                  Column(
+                    children: [
+                      Container(
+                        width: 56,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF7C5CFC), Color(0xFFFC5C9C)],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF7C5CFC).withOpacity(0.4),
+                              blurRadius: 20,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(Icons.casino, color: Colors.white, size: 32),
+                      ),
+                      const SizedBox(height: 14),
+                      const Text(
+                        'GOTCHA',
+                        style: TextStyle(
+                          fontSize: 44,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: -1,
+                          color: Color(0xFFF0F0FF),
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      const Text(
+                        'RANDOM SHARTLAR O\'YINI',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 2,
+                          color: Color(0xFF6B6B8A),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  // Selection Card
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF16161F),
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: Colors.white.withOpacity(0.07)),
+                    ),
+                    child: Column(
+                      children: [
+                        const Text(
+                          'NECHTA SAVOLLI BO\'LSIN?',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 1.5,
+                            color: Color(0xFF6B6B8A),
+                          ),
+                        ),
+                        const SizedBox(height: 18),
+                        GridView.count(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                          childAspectRatio: 1.5,
+                          children: [
+                            _buildCountBtn(20, 'Tezkor', const Color(0xFF7C5CFC)),
+                            _buildCountBtn(30, 'Standart', const Color(0xFFFC5C9C)),
+                            _buildCountBtn(50, 'Katta davra', const Color(0xFF3DDC84)),
+                            _buildCustomBtn(),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Start Button
+                  SizedBox(
+                    width: double.infinity,
+                    height: 58,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF7C5CFC),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        elevation: 10,
+                        shadowColor: const Color(0xFF7C5CFC).withOpacity(0.5),
+                      ),
+                      onPressed: () {
+                        SoundService().playWinner();
+                        _questionService.startSession(_selectedCount);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const GotchaGameScreen(),
+                          ),
+                        );
+                      },
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.play_arrow_rounded, color: Colors.white, size: 24),
+                          SizedBox(width: 8),
+                          Text(
+                            'O\'yinni boshlash',
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildCountChip({
-    required String label,
-    required String subLabel,
-    required bool isSelected,
-    required VoidCallback onTap,
-    bool isCustom = false,
-  }) {
-    final activeColor = isCustom ? const Color(0xFFFF007F) : const Color(0xFF00F0FF);
-
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
+  Widget _buildCountBtn(int count, String label, Color glowColor) {
+    final isSelected = !_isCustom && _selectedCount == count;
+    return GestureDetector(
+      onTap: () {
+        SoundService().playTick();
+        setState(() {
+          _selectedCount = count;
+          _isCustom = false;
+        });
+      },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        width: 135,
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
         decoration: BoxDecoration(
-          color: isSelected ? activeColor.withOpacity(0.18) : const Color(0xFF1B2033),
+          color: isSelected ? glowColor.withOpacity(0.15) : const Color(0xFF1E1E2D),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? activeColor : Colors.white12,
-            width: isSelected ? 2.0 : 1.0,
+            color: isSelected ? glowColor : Colors.white.withOpacity(0.06),
+            width: isSelected ? 2 : 1,
           ),
           boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: activeColor.withOpacity(0.3),
-                    blurRadius: 12,
-                    spreadRadius: 1,
-                  ),
-                ]
+              ? [BoxShadow(color: glowColor.withOpacity(0.3), blurRadius: 15)]
               : [],
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              label,
-              style: TextStyle(
-                color: isSelected ? Colors.white : Colors.white70,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+              '$count',
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w900,
+                color: Color(0xFFF0F0FF),
               ),
             ),
-            const SizedBox(height: 3),
+            const SizedBox(height: 2),
             Text(
-              subLabel,
+              label.toUpperCase(),
+              style: const TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 1,
+                color: Color(0xFF6B6B8A),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCustomBtn() {
+    final isSelected = _isCustom;
+    const glowColor = Color(0xFFFFBE0B);
+    return GestureDetector(
+      onTap: () {
+        SoundService().playTick();
+        _showCustomDialog();
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        decoration: BoxDecoration(
+          color: isSelected ? glowColor.withOpacity(0.15) : const Color(0xFF1E1E2D),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isSelected ? glowColor : Colors.white.withOpacity(0.06),
+            width: isSelected ? 2 : 1,
+          ),
+          boxShadow: isSelected
+              ? [BoxShadow(color: glowColor.withOpacity(0.3), blurRadius: 15)]
+              : [],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              isSelected ? '$_selectedCount' : '✏️',
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w900,
+                color: Color(0xFFF0F0FF),
+              ),
+            ),
+            const SizedBox(height: 2),
+            const Text(
+              'MAXSUS',
               style: TextStyle(
-                color: isSelected ? activeColor : Colors.white38,
-                fontSize: 11,
+                fontSize: 10,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 1,
+                color: Color(0xFF6B6B8A),
               ),
             ),
           ],
@@ -348,4 +417,3 @@ class _StartScreenState extends State<StartScreen> {
     );
   }
 }
-

@@ -1,7 +1,7 @@
-name: Gotcha
+name: gotcha_game
 description: "Gotcha - O'zbek tilidagi qiziqarli shartlar va random tanlov o'yini"
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  webview_flutter: ^4.10.0
+  audioplayers: ^6.0.0
 
 dev_dependencies:
   flutter_test:
@@ -23,5 +23,6 @@ flutter:
 
   assets:
     - assets/questions.json
-    - assets/index.html
-
+    - audio/bubble_pop.mp3
+    - audio/tick.mp3
+    - audio/winner.mp3

@@ -38,7 +38,7 @@ jobs:
           sed -i 's/minSdk = .*/minSdk = 24/' "$GRADLE_FILE" || true
           sed -i 's/minSdkVersion .*/minSdkVersion 24/' "$GRADLE_FILE" || true
 
-          # 4. Set beautiful user-facing app label in AndroidManifest.xml
+          # 3. Set clean app label in AndroidManifest.xml
           MANIFEST_FILE="android/app/src/main/AndroidManifest.xml"
           sed -i 's/android:label="gotcha_game"/android:label="Gotcha"/' "$MANIFEST_FILE" || true
           sed -i 's/android:label=".*"/android:label="Gotcha"/' "$MANIFEST_FILE" || true
@@ -58,9 +58,9 @@ jobs:
       - name: Create GitHub Release with APK
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.1
-          name: "Gotcha Game v1.0.1 APK (Yangi Dizayn va Ovozlar)"
-          body: "Gotcha o'yini - Yangi dizayn, 12 kishilik multi-touch, haqiqiy pufakcha ovozi va kengayish effekti bilan."
+          tag_name: v1.0.2
+          name: "Gotcha Game v1.0.2 APK (Pure Native Flutter - 12+ Barmoq)"
+          body: "Gotcha o'yini - 100% Native Flutter drayveri (12 tagacha to'liq multi-touch qo'llab-quvvatlaydi), yangi dizayn va toza audio bilan."
           draft: false
           prerelease: false
           files: build/app/outputs/flutter-apk/app-release.apk

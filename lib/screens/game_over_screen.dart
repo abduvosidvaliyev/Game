@@ -1,180 +1,87 @@
 import 'package:flutter/material.dart';
 import '../services/question_service.dart';
-import '../widgets/neon_button.dart';
-import 'gotcha_game_screen.dart';
+import 'start_screen.dart';
 
 class GameOverScreen extends StatelessWidget {
   const GameOverScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final service = QuestionService();
-    final total = service.sessionQuestions.length;
-    final completed = service.completedCount;
-    final forfeited = service.forfeitedCount;
+    final questionService = QuestionService();
 
     return Scaffold(
-      backgroundColor: const Color(0xFF07090F),
-      body: SafeArea(
+      backgroundColor: const Color(0xFF0D0D14),
+      body: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Spacer(),
-
-              // Trophy / Game over icon
-              Container(
-                width: 90,
-                height: 90,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: const Color(0xFF00FF87).withOpacity(0.12),
-                  border: Border.all(color: const Color(0xFF00FF87), width: 2),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF00FF87).withOpacity(0.4),
-                      blurRadius: 30,
-                    ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.emoji_events_rounded,
-                  color: Color(0xFF00FF87),
-                  size: 50,
-                ),
-              ),
-              const SizedBox(height: 24),
-
-              // Title
-              const Text(
-                'O\'YIN YAKUNLANDI!',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 2,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Barcha $total ta shart va savollar muvaffaqiyatli yakunlandi',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.white70,
-                  fontSize: 15,
-                ),
-              ),
-
-              const SizedBox(height: 36),
-
-              // Stats Cards
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildStatCard(
-                      label: 'Bajarildi',
-                      value: '$completed',
-                      color: const Color(0xFF00FF87),
-                      icon: Icons.check_circle_outline,
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(32),
+            decoration: BoxDecoration(
+              color: const Color(0xFF16161F),
+              borderRadius: BorderRadius.circular(28),
+              border: Border.all(color: Colors.white10),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 64,
+                  height: 64,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF3DDC84), Color(0xFF00C6FF)],
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: _buildStatCard(
-                      label: 'Yutqazildi',
-                      value: '$forfeited',
-                      color: const Color(0xFFFF3366),
-                      icon: Icons.cancel_outlined,
+                  child: const Icon(Icons.check_rounded, color: Colors.white, size: 38),
+                ),
+                const SizedBox(height: 18),
+                const Text(
+                  'O\'yin yakunlandi!',
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w900,
+                    color: Color(0xFFF0F0FF),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Barcha ${questionService.totalCount} ta shart muvaffaqiyatli bajarildi.',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF6B6B8A),
+                  ),
+                ),
+                const SizedBox(height: 28),
+                SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF7C5CFC),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    ),
+                    onPressed: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => const StartScreen()),
+                        (route) => false,
+                      );
+                    },
+                    child: const Text(
+                      'Qaytadan o\'ynash',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Colors.white),
                     ),
                   ),
-                ],
-              ),
-
-              const Spacer(),
-
-              // Replay button
-              NeonButton(
-                text: 'Qaytadan o\'ynash ($total ta)',
-                icon: Icons.replay,
-                color: const Color(0xFF00FF87),
-                height: 56,
-                width: double.infinity,
-                onPressed: () {
-                  service.startNewGame(total);
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const GotchaGameScreen()),
-                  );
-                },
-              ),
-              const SizedBox(height: 14),
-
-              // Main menu button
-              NeonButton(
-                text: 'Bosh menyuga qaytish',
-                icon: Icons.home_rounded,
-                color: const Color(0xFF00F0FF),
-                isOutlined: true,
-                height: 56,
-                width: double.infinity,
-                onPressed: () {
-                  Navigator.popUntil(context, (route) => route.isFirst);
-                },
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-
-  Widget _buildStatCard({
-    required String label,
-    required String value,
-    required Color color,
-    required IconData icon,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF131728),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.5), width: 1.5),
-        boxShadow: [
-          BoxShadow(
-            color: color.withOpacity(0.15),
-            blurRadius: 18,
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: color, size: 28),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 34,
-              fontWeight: FontWeight.w900,
-              shadows: [
-                Shadow(color: color.withOpacity(0.8), blurRadius: 12),
-              ],
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              color: color,
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
-

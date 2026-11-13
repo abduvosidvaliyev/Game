@@ -3,9 +3,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import '../services/question_service.dart';
 import '../services/sound_service.dart';
-import '../widgets/touch_canvas.dart';
 import 'challenge_screen.dart';
-import 'game_over_screen.dart';
+
+class TouchPoint {
+  final int id;
+  Offset position;
+  final Color color;
+  TouchPoint({required this.id, required this.position, required this.color});
+}
 
 class GotchaGameScreen extends StatefulWidget {
   const GotchaGameScreen({super.key});
@@ -22,401 +27,295 @@ class _GotchaGameScreenState extends State<GotchaGameScreen> with SingleTickerPr
   int? _selectedPointerId;
   double _holdProgress = 0.0;
   Timer? _holdTimer;
-  final List<BurstParticle> _particles = [];
 
-  late AnimationController _animController;
+  // Full-screen expansion transition
+  bool _isExpanding = false;
+  double _expandRadius = 0.0;
+  double _expandOpacity = 1.0;
+  Color _winnerColor = const Color(0xFF7C5CFC);
+  Offset _winnerPos = Offset.zero;
+
+  late AnimationController _pulseController;
   final Random _random = Random();
+  int _colorOffset = 0;
 
-  static const List<Color> _neonPalette = [
-    Color(0xFF00F0FF), // Cyan
-    Color(0xFFFF007F), // Neon Pink
-    Color(0xFF00FF87), // Bright Green
-    Color(0xFFFFBE0B), // Neon Gold
-    Color(0xFF9D00FF), // Electric Purple
-    Color(0xFFFF5252), // Bright Coral
-    Color(0xFF00D2FF), // Sky Blue
-    Color(0xFFFF3366), // Hot Red
+  static const List<Color> _palette = [
+    Color(0xFFFF4B6E), // coral red
+    Color(0xFF7C5CFC), // violet
+    Color(0xFF3DDC84), // green
+    Color(0xFFFFBE0B), // amber
+    Color(0xFF00C6FF), // sky blue
+    Color(0xFFFF7A00), // orange
+    Color(0xFFE040FB), // magenta
+    Color(0xFF00E5FF), // cyan
+    Color(0xFF76FF03), // lime
+    Color(0xFFFF4081), // pink
+    Color(0xFFF9A8D4), // rose
+    Color(0xFF34D399), // emerald
   ];
 
   @override
   void initState() {
     super.initState();
-    _animController = AnimationController(
+    _pulseController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
-    )..repeat();
+      duration: const Duration(milliseconds: 1500),
+    )..repeat(reverse: true);
   }
 
   @override
   void dispose() {
     _holdTimer?.cancel();
-    _animController.dispose();
+    _pulseController.dispose();
     super.dispose();
   }
 
   Color _getNextColor() {
     final usedColors = _touches.values.map((t) => t.color).toSet();
-    for (final color in _neonPalette) {
-      if (!usedColors.contains(color)) return color;
+    for (int i = 0; i < _palette.length; i++) {
+      final c = _palette[(_colorOffset + i) % _palette.length];
+      if (!usedColors.contains(c)) {
+        _colorOffset = (_colorOffset + i + 1) % _palette.length;
+        return c;
+      }
     }
-    return _neonPalette[_random.nextInt(_neonPalette.length)];
+    _colorOffset = (_colorOffset + 1) % _palette.length;
+    return _palette[_colorOffset];
   }
 
   void _onPointerDown(PointerDownEvent event) {
-    if (_selectedPointerId != null) return; // already selected winner
+    if (_selectedPointerId != null) return;
 
     setState(() {
       _touches[event.pointer] = TouchPoint(
         id: event.pointer,
-        position: event.localPosition,
+        position: event.position,
         color: _getNextColor(),
       );
     });
 
-    _soundService.playTouchDown();
-    _checkHoldState();
+    _soundService.playPop();
+    _checkHold();
   }
 
   void _onPointerMove(PointerMoveEvent event) {
     if (_touches.containsKey(event.pointer)) {
       setState(() {
-        _touches[event.pointer]!.position = event.localPosition;
+        _touches[event.pointer]!.position = event.position;
       });
     }
   }
 
   void _onPointerUp(PointerUpEvent event) {
     if (_selectedPointerId != null) return;
-
     setState(() {
       _touches.remove(event.pointer);
     });
-    _checkHoldState();
+    _checkHold();
   }
 
   void _onPointerCancel(PointerCancelEvent event) {
     if (_selectedPointerId != null) return;
-
     setState(() {
       _touches.remove(event.pointer);
     });
-    _checkHoldState();
+    _checkHold();
   }
 
-  void _checkHoldState() {
+  void _checkHold() {
+    if (_selectedPointerId != null) return;
+
     if (_touches.length >= 2) {
-      if (_holdTimer == null) {
-        _startHoldCountdown();
-      }
+      if (_holdTimer == null) _startHold();
     } else {
-      _resetHoldCountdown();
+      _resetHold();
     }
   }
 
-  void _startHoldCountdown() {
-    _holdTimer?.cancel();
+  void _startHold() {
     _holdProgress = 0.0;
+    const totalDuration = 2200; // ms
+    const step = 30; // ms
+    int elapsed = 0;
 
-    const totalDurationMs = 2400; // 2.4 seconds hold to choose
-    const stepMs = 30;
-    int elapsedMs = 0;
+    _holdTimer = Timer.periodic(const Duration(milliseconds: step), (timer) {
+      elapsed += step;
+      setState(() {
+        _holdProgress = (elapsed / totalDuration).clamp(0.0, 1.0);
+      });
 
-    _holdTimer = Timer.periodic(const Duration(milliseconds: stepMs), (timer) {
+      if (elapsed % 300 == 0) {
+        _soundService.playTick();
+      }
+
+      if (elapsed >= totalDuration) {
+        timer.cancel();
+        _holdTimer = null;
+        _chooseWinner();
+      }
+    });
+  }
+
+  void _resetHold() {
+    _holdTimer?.cancel();
+    _holdTimer = null;
+    setState(() {
+      _holdProgress = 0.0;
+    });
+  }
+
+  void _chooseWinner() {
+    if (_touches.isEmpty) return;
+
+    final keys = _touches.keys.toList();
+    _selectedPointerId = keys[_random.nextInt(keys.length)];
+    final winner = _touches[_selectedPointerId]!;
+
+    _soundService.playWinner();
+
+    final size = MediaQuery.of(context).size;
+    final maxDist = max(
+      max(winner.position.dx, size.width - winner.position.dx),
+      max(winner.position.dy, size.height - winner.position.dy),
+    ) * 1.5;
+
+    setState(() {
+      _isExpanding = true;
+      _winnerColor = winner.color;
+      _winnerPos = winner.position;
+      _expandRadius = 45.0;
+      _expandOpacity = 1.0;
+    });
+
+    // Animate wave expansion
+    Timer.periodic(const Duration(milliseconds: 16), (timer) {
       if (!mounted) {
         timer.cancel();
         return;
       }
-
-      elapsedMs += stepMs;
       setState(() {
-        _holdProgress = (elapsedMs / totalDurationMs).clamp(0.0, 1.0);
-      });
-
-      if (elapsedMs % 400 == 0) {
-        _soundService.playTimerTick();
-      }
-
-      if (elapsedMs >= totalDurationMs) {
-        timer.cancel();
-        _chooseRandomWinner();
-      }
-    });
-  }
-
-  void _resetHoldCountdown() {
-    _holdTimer?.cancel();
-    _holdTimer = null;
-    if (mounted) {
-      setState(() {
-        _holdProgress = 0.0;
-      });
-    }
-  }
-
-  void _chooseRandomWinner() {
-    if (_touches.isEmpty) return;
-
-    final keys = _touches.keys.toList();
-    final chosenId = keys[_random.nextInt(keys.length)];
-    final winnerTouch = _touches[chosenId]!;
-
-    _soundService.playWinnerSelected();
-
-    // Generate burst particles around the winner
-    _particles.clear();
-    for (int i = 0; i < 40; i++) {
-      final angle = _random.nextDouble() * 2 * pi;
-      final speed = 2.0 + _random.nextDouble() * 7.0;
-      _particles.add(
-        BurstParticle(
-          position: winnerTouch.position,
-          velocity: Offset(cos(angle) * speed, sin(angle) * speed),
-          color: winnerTouch.color,
-          radius: 3.0 + _random.nextDouble() * 5.0,
-          opacity: 1.0,
-        ),
-      );
-    }
-
-    setState(() {
-      _selectedPointerId = chosenId;
-    });
-
-    // Particle animation step
-    Timer.periodic(const Duration(milliseconds: 16), (particleTimer) {
-      if (!mounted || particleTimer.tick > 45) {
-        particleTimer.cancel();
-        return;
-      }
-      setState(() {
-        for (final p in _particles) {
-          p.position += p.velocity;
-          p.opacity -= 0.022;
+        _expandRadius += (maxDist - _expandRadius) * 0.12;
+        if (_expandRadius > maxDist * 0.4) {
+          _expandOpacity = max(0.0, _expandOpacity - 0.04);
         }
       });
+
+      if (_expandOpacity <= 0.01) {
+        timer.cancel();
+      }
     });
 
-    // Wait 1.3s and open challenge screen
-    Timer(const Duration(milliseconds: 1300), () {
+    Future.delayed(const Duration(milliseconds: 1100), () {
       if (!mounted) return;
-      _openChallenge();
-    });
-  }
-
-  void _openChallenge() {
-    final question = _questionService.getNextQuestion();
-    if (question == null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const GameOverScreen()),
-      );
-      return;
-    }
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ChallengeScreen(
-          question: question,
-          onRoundFinished: () {
-            setState(() {
-              _touches.clear();
-              _selectedPointerId = null;
-              _holdProgress = 0.0;
-              _particles.clear();
-            });
-
-            if (!_questionService.hasMoreQuestions) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const GameOverScreen()),
-              );
-            }
-          },
-        ),
-      ),
-    );
-  }
-
-  void _confirmExit() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF141824),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: const BorderSide(color: Color(0xFF00F0FF), width: 1.5),
-        ),
-        title: const Text(
-          'O\'yindan chiqish',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        content: const Text(
-          'Bosh menyuga qaytmoqchimisiz? Hozirgi o\'yin natijalari bekor qilinadi.',
-          style: TextStyle(color: Colors.white70),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Davom etish', style: TextStyle(color: Colors.white54)),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFF3366),
-              foregroundColor: Colors.white,
+      final currentQuestion = _questionService.currentQuestion;
+      if (currentQuestion != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChallengeScreen(
+              question: currentQuestion,
+              winnerColor: winner.color,
             ),
-            onPressed: () {
-              Navigator.pop(context); // close dialog
-              Navigator.pop(context); // back to start screen
-            },
-            child: const Text('Ha, chiqish'),
           ),
-        ],
-      ),
-    );
+        );
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final currentQ = _questionService.currentQuestionIndex + 1;
-    final totalQ = _questionService.sessionQuestions.length;
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF07090F),
+      backgroundColor: const Color(0xFF0D0D14),
       body: Listener(
+        behavior: HitTestBehavior.opaque,
         onPointerDown: _onPointerDown,
         onPointerMove: _onPointerMove,
         onPointerUp: _onPointerUp,
         onPointerCancel: _onPointerCancel,
-        behavior: HitTestBehavior.opaque,
         child: Stack(
           children: [
-            // Custom multi-touch interactive canvas
-            Positioned.fill(
-              child: AnimatedBuilder(
-                animation: _animController,
-                builder: (context, child) {
-                  return CustomPaint(
-                    painter: TouchCanvasPainter(
-                      touches: _touches,
-                      holdProgress: _holdProgress,
-                      selectedPointerId: _selectedPointerId,
-                      particles: _particles,
-                      animationValue: _animController.value,
-                    ),
-                  );
-                },
+            // Custom Painter for all touch circles and full-screen winner wave
+            CustomPaint(
+              size: size,
+              painter: _TouchPainter(
+                touches: _touches.values.toList(),
+                selectedId: _selectedPointerId,
+                pulseValue: _pulseController.value,
+                isExpanding: _isExpanding,
+                expandRadius: _expandRadius,
+                expandOpacity: _expandOpacity,
+                winnerColor: _winnerColor,
+                winnerPos: _winnerPos,
               ),
             ),
 
-            // Top Status Bar (Safe Area)
+            // Top Header: Home Button & Question counter
             SafeArea(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Home / Exit button
-                    IconButton(
-                      icon: const Icon(Icons.home_outlined, color: Colors.white70, size: 28),
-                      onPressed: _confirmExit,
-                      tooltip: 'Bosh menyu',
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            backgroundColor: const Color(0xFF16161F),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                            title: const Text('Bosh menyuga qaytasizmi?', style: TextStyle(fontWeight: FontWeight.w900)),
+                            content: const Text('O\'yin tarixingiz o\'chib ketadi', style: TextStyle(color: Color(0xFF6B6B8A))),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(ctx),
+                                child: const Text('Yo\'q', style: TextStyle(color: Color(0xFF6B6B8A), fontWeight: FontWeight.w800)),
+                              ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFFF4B6E),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(ctx);
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Ha, qaytish', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: 42,
+                        height: 42,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF16161F).withOpacity(0.85),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white10),
+                        ),
+                        child: const Icon(Icons.home_rounded, color: Colors.white, size: 20),
+                      ),
                     ),
-
-                    // Round / Question Badge
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF131726).withOpacity(0.85),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: const Color(0xFF00F0FF).withOpacity(0.5)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF00F0FF).withOpacity(0.2),
-                            blurRadius: 12,
-                          ),
-                        ],
+                        color: const Color(0xFF16161F).withOpacity(0.85),
+                        borderRadius: BorderRadius.circular(999),
+                        border: Border.all(color: Colors.white10),
                       ),
                       child: Text(
-                        'Savol: $currentQ / $totalQ',
+                        '${_questionService.currentIndex + 1} / ${_questionService.totalCount}',
                         style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 0.8,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFFF0F0FF),
                         ),
                       ),
                     ),
-
-                    // Touch Count Badge
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF161B2E).withOpacity(0.85),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.white24),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.touch_app, color: Color(0xFF00FF87), size: 18),
-                          const SizedBox(width: 6),
-                          Text(
-                            '${_touches.length}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    const SizedBox(width: 42),
                   ],
-                ),
-              ),
-            ),
-
-            // Hint / Instructions Banner at bottom
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 24, left: 24, right: 24),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF0F1322).withOpacity(0.85),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: _selectedPointerId != null
-                            ? const Color(0xFF00FF87)
-                            : _touches.length >= 2
-                                ? const Color(0xFFFF007F)
-                                : Colors.white12,
-                        width: 1.2,
-                      ),
-                    ),
-                    child: Text(
-                      _selectedPointerId != null
-                          ? '🎉 Shart bajaruvchi aniqlandi!'
-                          : _touches.length >= 2
-                              ? '⚡ Ushlab turing... Tanlanmoqda!'
-                              : _touches.length == 1
-                                  ? 'Yana bitta barmoq bosing (kamida 2 kishi)'
-                                  : 'Barmoqlaringizni ekranga bosing va ushlab turing',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: _selectedPointerId != null
-                            ? const Color(0xFF00FF87)
-                            : _touches.length >= 2
-                                ? const Color(0xFFFF007F)
-                                : Colors.white70,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
                 ),
               ),
             ),
@@ -427,3 +326,70 @@ class _GotchaGameScreenState extends State<GotchaGameScreen> with SingleTickerPr
   }
 }
 
+class _TouchPainter extends CustomPainter {
+  final List<TouchPoint> touches;
+  final int? selectedId;
+  final double pulseValue;
+  final bool isExpanding;
+  final double expandRadius;
+  final double expandOpacity;
+  final Color winnerColor;
+  final Offset winnerPos;
+
+  _TouchPainter({
+    required this.touches,
+    required this.selectedId,
+    required this.pulseValue,
+    required this.isExpanding,
+    required this.expandRadius,
+    required this.expandOpacity,
+    required this.winnerColor,
+    required this.winnerPos,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // 1. Draw winner expanding circular wave
+    if (isExpanding && expandOpacity > 0.0) {
+      final expandPaint = Paint()
+        ..color = winnerColor.withOpacity(expandOpacity)
+        ..style = PaintingStyle.fill;
+      canvas.drawCircle(winnerPos, expandRadius, expandPaint);
+    }
+
+    // 2. Draw active finger touch circles
+    for (final touch in touches) {
+      if (isExpanding && touch.id != selectedId) continue;
+
+      final isSelected = touch.id == selectedId;
+      final pulse = pulseValue * 6.0;
+      final radius = isSelected ? 46.0 : 38.0;
+
+      // Soft glow
+      final glowPaint = Paint()
+        ..shader = RadialGradient(
+          colors: [
+            touch.color.withOpacity(0.35),
+            Colors.transparent,
+          ],
+        ).createShader(Rect.fromCircle(center: touch.position, radius: radius + 40 + pulse));
+      canvas.drawCircle(touch.position, radius + 40 + pulse, glowPaint);
+
+      // Outer Ring
+      final ringPaint = Paint()
+        ..color = touch.color.withOpacity(0.7)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.5;
+      canvas.drawCircle(touch.position, radius + 12 + pulse, ringPaint);
+
+      // Core Solid Circle
+      final corePaint = Paint()
+        ..color = isSelected ? Colors.white : touch.color
+        ..style = PaintingStyle.fill;
+      canvas.drawCircle(touch.position, radius, corePaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _TouchPainter oldDelegate) => true;
+}

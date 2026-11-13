@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 import '../models/question.dart';
 import '../services/question_service.dart';
 import '../services/sound_service.dart';
-import '../widgets/neon_button.dart';
+import 'game_over_screen.dart';
+import 'gotcha_game_screen.dart';
 
 class ChallengeScreen extends StatefulWidget {
   final QuestionItem question;
-  final VoidCallback onRoundFinished;
+  final Color winnerColor;
 
   const ChallengeScreen({
     super.key,
     required this.question,
-    required this.onRoundFinished,
+    required this.winnerColor,
   });
 
   @override
@@ -24,17 +25,14 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
   final SoundService _soundService = SoundService();
 
   bool _isTimerStarted = false;
-  bool _isFinished = false;
-  bool _isSuccess = false;
   int _remainingSeconds = 0;
-  int _initialDuration = 0;
   Timer? _timer;
+  bool _isFinished = false;
 
   @override
   void initState() {
     super.initState();
-    _initialDuration = widget.question.duration ?? (widget.question.timeLimit ? 30 : 0);
-    _remainingSeconds = _initialDuration;
+    _remainingSeconds = widget.question.duration ?? 30;
   }
 
   @override
@@ -49,346 +47,316 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
     });
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (!mounted) {
-        timer.cancel();
-        return;
-      }
-
-      setState(() {
-        if (_remainingSeconds > 1) {
+      if (_remainingSeconds > 1) {
+        setState(() {
           _remainingSeconds--;
-          _soundService.playTimerTick();
-        } else {
+        });
+        _soundService.playTick();
+      } else {
+        timer.cancel();
+        _soundService.playTick();
+        setState(() {
           _remainingSeconds = 0;
-          timer.cancel();
-          _soundService.playTimerDone();
-          _finishTask(completed: true, autoExpired: true);
-        }
-      });
+          _isFinished = true;
+        });
+      }
     });
   }
 
-  void _finishTask({required bool completed, bool autoExpired = false}) {
+  void _onDone() {
     _timer?.cancel();
-
-    if (completed) {
-      _soundService.playSuccess();
-    } else {
-      _soundService.playFail();
-    }
-
-    _questionService.advanceQuestion(completed: completed);
-
+    _soundService.playWinner();
     setState(() {
       _isFinished = true;
-      _isSuccess = completed;
     });
+  }
 
-    if (autoExpired) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('⏰ Vaqt tugadi! Shart yakunlandi.'),
-          backgroundColor: Color(0xFF00F0FF),
-          duration: Duration(seconds: 2),
-        ),
+  void _onFail() {
+    _timer?.cancel();
+    _soundService.playPop();
+    setState(() {
+      _isFinished = true;
+    });
+  }
+
+  void _nextRound() {
+    final next = _questionService.nextQuestion();
+    if (next != null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const GotchaGameScreen()),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const GameOverScreen()),
       );
     }
   }
 
-  void _returnToGame() {
-    widget.onRoundFinished();
-    Navigator.pop(context);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final category = _questionService.getCategoryFor(widget.question.categoryId);
-    final categoryColor = category?.color ?? const Color(0xFF00F0FF);
-    final isTimed = widget.question.timeLimit;
-    final currentQ = _questionService.currentQuestionIndex + 1;
-    final totalQ = _questionService.sessionQuestions.length;
+    final isTimed = widget.question.timeLimit && (widget.question.duration ?? 0) > 0;
+    final catColor = widget.question.categoryColor;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0D18),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white70),
-          onPressed: _returnToGame,
-          tooltip: 'O\'yinga qaytish',
-        ),
-        title: Text(
-          'Savol $currentQ / $totalQ',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-      ),
+      backgroundColor: const Color(0xFF0D0D14),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           child: Column(
             children: [
-              // Category badge
+              // Header
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: categoryColor.withOpacity(0.15),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: categoryColor.withOpacity(0.8), width: 1.2),
-                      boxShadow: [
-                        BoxShadow(
-                          color: categoryColor.withOpacity(0.3),
-                          blurRadius: 12,
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(category?.iconData ?? Icons.star, color: categoryColor, size: 18),
-                        const SizedBox(width: 8),
-                        Text(
-                          category?.name ?? 'Topshiriq',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+                  GestureDetector(
+                    onTap: () {
+                      _timer?.cancel();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const GotchaGameScreen()),
+                      );
+                    },
+                    child: Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF16161F),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white10),
+                      ),
+                      child: const Icon(Icons.arrow_back_rounded, color: Colors.white, size: 20),
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  // Difficulty badge
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
                     decoration: BoxDecoration(
-                      color: widget.question.difficultyColor.withOpacity(0.15),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: widget.question.difficultyColor.withOpacity(0.6),
-                        width: 1,
-                      ),
+                      color: const Color(0xFF16161F),
+                      borderRadius: BorderRadius.circular(999),
+                      border: Border.all(color: Colors.white10),
                     ),
                     child: Text(
-                      widget.question.difficultyUz,
-                      style: TextStyle(
-                        color: widget.question.difficultyColor,
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
+                      '${_questionService.currentIndex + 1} / ${_questionService.totalCount}',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFFF0F0FF),
                       ),
                     ),
                   ),
+                  const SizedBox(width: 42),
                 ],
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
 
-              // Main Question Card
               Expanded(
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF131728),
-                    borderRadius: BorderRadius.circular(28),
-                    border: Border.all(
-                      color: categoryColor.withOpacity(0.35),
-                      width: 1.5,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: categoryColor.withOpacity(0.1),
-                        blurRadius: 30,
-                        spreadRadius: 2,
-                      ),
-                    ],
-                  ),
+                child: SingleChildScrollView(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Title
-                      Text(
-                        widget.question.title,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: categoryColor,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 0.5,
+                      // Winner Ring Banner
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        decoration: BoxDecoration(
+                          color: widget.winnerColor.withOpacity(0.12),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 58,
+                              height: 58,
+                              decoration: BoxDecoration(
+                                color: widget.winnerColor,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: widget.winnerColor.withOpacity(0.5),
+                                    blurRadius: 24,
+                                  ),
+                                ],
+                              ),
+                              child: const Icon(Icons.star_rounded, color: Colors.white, size: 32),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'SHART BAJARUVCHI',
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 1.5,
+                                color: Color(0xFF6B6B8A),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 18),
 
-                      // Description
-                      Text(
-                        widget.question.description,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 19,
-                          height: 1.45,
-                          fontWeight: FontWeight.w500,
+                      const SizedBox(height: 16),
+
+                      // Challenge Card
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF16161F),
+                          borderRadius: BorderRadius.circular(24),
+                          border: Border.all(color: Colors.white.withOpacity(0.07)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Category Tag
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: catColor.withOpacity(0.15),
+                                borderRadius: BorderRadius.circular(999),
+                                border: Border.all(color: catColor),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(widget.question.categoryIcon, size: 14, color: catColor),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    widget.question.categoryNameUz.toUpperCase(),
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w900,
+                                      color: catColor,
+                                      letterSpacing: 0.5,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            const SizedBox(height: 16),
+
+                            Text(
+                              widget.question.title,
+                              style: const TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w900,
+                                color: Color(0xFFF0F0FF),
+                              ),
+                            ),
+
+                            const SizedBox(height: 10),
+
+                            Text(
+                              widget.question.description,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                height: 1.5,
+                                color: const Color(0xFFF0F0FF).withOpacity(0.85),
+                              ),
+                            ),
+
+                            if (isTimed && !_isTimerStarted && !_isFinished) ...[
+                              const SizedBox(height: 20),
+                              SizedBox(
+                                width: double.infinity,
+                                height: 52,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF7C5CFC),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                  ),
+                                  onPressed: _startTimer,
+                                  child: Text(
+                                    '▶ Shartni boshlash (${widget.question.duration}s)',
+                                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w900, color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ],
+
+                            if (isTimed && _isTimerStarted) ...[
+                              const SizedBox(height: 20),
+                              Center(
+                                child: Container(
+                                  width: 90,
+                                  height: 90,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(color: const Color(0xFF7C5CFC), width: 5),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    '$_remainingSeconds',
+                                    style: const TextStyle(
+                                      fontSize: 34,
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ],
                         ),
                       ),
-
-                      // Interactive Timer Section (if timed)
-                      if (isTimed) ...[
-                        const SizedBox(height: 32),
-                        if (!_isTimerStarted && !_isFinished) ...[
-                          // Start Timer Button
-                          NeonButton(
-                            text: 'Shartni boshlash ($_initialDuration soniya)',
-                            icon: Icons.timer,
-                            color: const Color(0xFF00F0FF),
-                            height: 52,
-                            onPressed: _startTimer,
-                          ),
-                        ] else ...[
-                          // Animated Countdown Circle
-                          _buildTimerDisplay(categoryColor),
-                        ],
-                      ],
                     ],
                   ),
                 ),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
 
-              // Action buttons section
-              if (!_isFinished) ...[
-                // If not finished yet: Show "Tugatdim" and "Yutqazdim"
-                // If timed and timer not started yet, user can also directly finish or start timer
+              // Action Buttons
+              if (!_isFinished)
                 Row(
                   children: [
                     Expanded(
-                      child: NeonButton(
-                        text: 'Yutqazdim',
-                        icon: Icons.close_rounded,
-                        color: const Color(0xFFFF3366),
-                        height: 54,
-                        onPressed: () => _finishTask(completed: false),
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          side: const BorderSide(color: Color(0xFFFF4B6E), width: 2),
+                          backgroundColor: const Color(0xFFFF4B6E).withOpacity(0.08),
+                        ),
+                        onPressed: _onFail,
+                        child: const Text('✕ Yutqazdim', style: TextStyle(color: Color(0xFFFF4B6E), fontWeight: FontWeight.w900)),
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    const SizedBox(width: 12),
                     Expanded(
-                      child: NeonButton(
-                        text: 'Tugatdim',
-                        icon: Icons.check_circle_outline,
-                        color: const Color(0xFF00FF87),
-                        height: 54,
-                        onPressed: () => _finishTask(completed: true),
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          side: const BorderSide(color: Color(0xFF3DDC84), width: 2),
+                          backgroundColor: const Color(0xFF3DDC84).withOpacity(0.08),
+                        ),
+                        onPressed: _onDone,
+                        child: const Text('✓ Tugatdim', style: TextStyle(color: Color(0xFF3DDC84), fontWeight: FontWeight.w900)),
                       ),
                     ),
                   ],
-                ),
-              ] else ...[
-                // Finished state: Success or Failed banner + Return to Game button
-                Container(
+                )
+              else
+                SizedBox(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  decoration: BoxDecoration(
-                    color: _isSuccess
-                        ? const Color(0xFF00FF87).withOpacity(0.15)
-                        : const Color(0xFFFF3366).withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: _isSuccess ? const Color(0xFF00FF87) : const Color(0xFFFF3366),
+                  height: 54,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF1E1E2D),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      side: const BorderSide(color: Colors.white10),
                     ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        _isSuccess ? Icons.check_circle : Icons.cancel,
-                        color: _isSuccess ? const Color(0xFF00FF87) : const Color(0xFFFF3366),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        _isSuccess ? 'Shart muvaffaqiyatli bajarildi!' : 'Shart bajarilmadi (yutqazildi)',
-                        style: TextStyle(
-                          color: _isSuccess ? const Color(0xFF00FF87) : const Color(0xFFFF3366),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ],
+                    onPressed: _nextRound,
+                    child: const Text('O\'yinga qaytish ↩', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
                   ),
                 ),
-                const SizedBox(height: 14),
-                NeonButton(
-                  text: 'O\'yinga qaytish (Keyingi raund)',
-                  icon: Icons.arrow_forward_rounded,
-                  color: const Color(0xFF00F0FF),
-                  height: 56,
-                  width: double.infinity,
-                  onPressed: _returnToGame,
-                ),
-              ],
             ],
           ),
         ),
       ),
     );
   }
-
-  Widget _buildTimerDisplay(Color accentColor) {
-    final double progress = _initialDuration > 0
-        ? (_remainingSeconds / _initialDuration).clamp(0.0, 1.0)
-        : 0.0;
-
-    final timerColor = _remainingSeconds <= 5
-        ? const Color(0xFFFF3366)
-        : const Color(0xFF00F0FF);
-
-    return Column(
-      children: [
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            SizedBox(
-              width: 110,
-              height: 110,
-              child: CircularProgressIndicator(
-                value: progress,
-                strokeWidth: 8,
-                backgroundColor: Colors.white12,
-                valueColor: AlwaysStoppedAnimation<Color>(timerColor),
-              ),
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  '$_remainingSeconds',
-                  style: TextStyle(
-                    color: timerColor,
-                    fontSize: 38,
-                    fontWeight: FontWeight.bold,
-                    shadows: [
-                      Shadow(color: timerColor.withOpacity(0.6), blurRadius: 15),
-                    ],
-                  ),
-                ),
-                const Text(
-                  'soniya',
-                  style: TextStyle(color: Colors.white54, fontSize: 12),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
-    );
-  }
 }
-
