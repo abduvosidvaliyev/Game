@@ -79,8 +79,9 @@ class _GotchaGameScreenState extends State<GotchaGameScreen> with SingleTickerPr
         return c;
       }
     }
-    _colorOffset = (_colorOffset + 1) % _palette.length;
-    return _palette[_colorOffset];
+    // Agar 12 tadan ham ko'p barmoq qo'yilsa, avtomatik ravishda cheksiz yorqin yangi rang generatsiya qiladi!
+    final hue = (_touches.length * 137.5) % 360.0; // Oltin burchak bo'yicha to'qnashmaydigan rang
+    return HSLColor.fromAHSL(1.0, hue, 0.85, 0.60).toColor();
   }
 
   void _onPointerDown(PointerDownEvent event) {
