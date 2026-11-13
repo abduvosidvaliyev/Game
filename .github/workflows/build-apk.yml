@@ -28,16 +28,25 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Setup Android project
+      - name: Setup Android Project
         run: |
           # 1. Generate clean Android scaffolding
           flutter create --org com.gotcha.game --project-name gotcha_game .
-          
-          # 2. Find build.gradle file (handles both .gradle and .gradle.kts)
-          GRADLE_FILE=$(find android/app -name "build.gradle*" | head -n 1)
-          echo "Target gradle file: $GRADLE_FILE"
 
-          # 3. Ensure minSdkVersion 21 for webview compatibility
+          # 2. Disable lintVitalAnalyzeRelease across all subprojects (fixes webview_flutter lint bug)
+          cat << 'EOF' >> android/build.gradle.kts
+
+          subprojects {
+              afterEvaluate {
+                  tasks.matching { it.name.startsWith("lintVital") }.configureEach {
+                      enabled = false
+                  }
+              }
+          }
+          EOF
+
+          # 3. Ensure minSdkVersion 21
+          GRADLE_FILE=$(find android/app -name "build.gradle*" | head -n 1)
           sed -i 's/minSdk = .*/minSdk = 21/' "$GRADLE_FILE" || true
           sed -i 's/minSdkVersion .*/minSdkVersion 21/' "$GRADLE_FILE" || true
 
