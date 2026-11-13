@@ -33,10 +33,10 @@ jobs:
           # 1. Generate clean Android scaffold
           flutter create --org com.gotcha.game --project-name gotcha_game .
 
-          # 2. Ensure minSdkVersion 21
+          # 2. Set minSdk = 23 (Flutter latest requirement)
           GRADLE_FILE=$(find android/app -name "build.gradle*" | head -n 1)
-          sed -i 's/minSdk = .*/minSdk = 21/' "$GRADLE_FILE" || true
-          sed -i 's/minSdkVersion .*/minSdkVersion 21/' "$GRADLE_FILE" || true
+          sed -i 's/minSdk = .*/minSdk = 23/' "$GRADLE_FILE" || true
+          sed -i 's/minSdkVersion .*/minSdkVersion 23/' "$GRADLE_FILE" || true
 
       - name: Get Flutter dependencies
         run: flutter pub get
@@ -44,8 +44,7 @@ jobs:
       - name: Build APK (Release)
         run: |
           cd android
-          # Build release APK while skipping the problematic lintVital task
-          ./gradlew assembleRelease -x lintVitalAnalyzeRelease -x lintVitalReportRelease --stacktrace
+          ./gradlew assembleRelease -x lintVitalAnalyzeRelease -x lintVitalReportRelease
           cd ..
 
       - name: Upload APK as Artifact
