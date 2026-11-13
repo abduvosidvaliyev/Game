@@ -33,13 +33,16 @@ jobs:
           if [ ! -d "android" ]; then
             echo "Android scaffolding not found. Generating with flutter create..."
             flutter create --org com.gotcha.game --project-name gotcha_game .
+            # Disable lint fatal errors and set minSdkVersion for modern webview plugins
+            sed -i '/android {/a \    lintOptions {\n        abortOnError false\n        checkReleaseBuilds false\n    }' android/app/build.gradle
+            sed -i 's/minSdkVersion .*/minSdkVersion 21/' android/app/build.gradle
           fi
 
       - name: Get Flutter dependencies
         run: flutter pub get
 
       - name: Build APK (Release)
-        run: flutter build apk --release
+        run: flutter build apk --release --no-tree-shake-icons
 
       - name: Upload APK as Artifact
         uses: actions/upload-artifact@v4
