@@ -50,9 +50,9 @@ jobs:
       - name: Create GitHub Release with APK
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.0
-          name: "Gotcha Game v1.0.0 APK"
-          body: "Gotcha o'yini - O'zbekcha shartlar bilan Android APK"
+          tag_name: v1.0.1
+          name: "Gotcha Game v1.0.1 APK (Yangi Dizayn va Ovozlar)"
+          body: "Gotcha o'yini - Yangi dizayn, 12 kishilik multi-touch, haqiqiy pufakcha ovozi va kengayish effekti bilan."
           draft: false
           prerelease: false
           files: build/app/outputs/flutter-apk/app-release.apk

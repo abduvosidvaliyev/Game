@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'screens/start_screen.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Set system navigation & status bar transparent for immersive neon aesthetic
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: Color(0xFF07090F),
-      systemNavigationBarIconBrightness: Brightness.light,
-    ),
-  );
+
+  // Fullscreen immersive mode
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
   runApp(const GotchaApp());
 }
@@ -23,22 +20,64 @@ class GotchaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Gotcha Game',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF07090F),
-        colorScheme: const ColorScheme.dark(
-          primary: Color(0xFF00F0FF),
-          secondary: Color(0xFFFF007F),
-          surface: Color(0xFF131728),
-        ),
-        fontFamily: 'Roboto',
-        useMaterial3: true,
-      ),
-      home: const StartScreen(),
+      home: GotchaWebViewScreen(),
     );
   }
 }
 
+class GotchaWebViewScreen extends StatefulWidget {
+  const GotchaWebViewScreen({super.key});
+
+  @override
+  State<GotchaWebViewScreen> createState() => _GotchaWebViewScreenState();
+}
+
+class _GotchaWebViewScreenState extends State<GotchaWebViewScreen> {
+  late final WebViewController _controller;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0xFF0D0D14))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageFinished: (String url) {
+            if (mounted) {
+              setState(() {
+                _isLoading = false;
+              });
+            }
+          },
+        ),
+      )
+      ..loadFlutterAsset('assets/index.html');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF0D0D14),
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: Stack(
+          children: [
+            WebViewWidget(controller: _controller),
+            if (_isLoading)
+              const Center(
+                child: CircularProgressIndicator(
+                  color: Color(0xFF7C5CFC),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
