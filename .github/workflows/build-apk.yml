@@ -38,16 +38,10 @@ jobs:
           sed -i 's/minSdk = .*/minSdk = 24/' "$GRADLE_FILE" || true
           sed -i 's/minSdkVersion .*/minSdkVersion 24/' "$GRADLE_FILE" || true
 
-          # 3. Disable lint completely in android/app/build.gradle.kts so lintVital never runs
-          cat << 'EOF' >> "$GRADLE_FILE"
-
-          android {
-              lint {
-                  checkReleaseBuilds = false
-                  abortOnError = false
-              }
-          }
-          EOF
+          # 4. Set beautiful user-facing app label in AndroidManifest.xml
+          MANIFEST_FILE="android/app/src/main/AndroidManifest.xml"
+          sed -i 's/android:label="gotcha_game"/android:label="Gotcha"/' "$MANIFEST_FILE" || true
+          sed -i 's/android:label=".*"/android:label="Gotcha"/' "$MANIFEST_FILE" || true
 
       - name: Get Flutter dependencies
         run: flutter pub get
