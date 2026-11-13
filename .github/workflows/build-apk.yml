@@ -33,10 +33,10 @@ jobs:
           # 1. Generate clean Android scaffold
           flutter create --org com.gotcha.game --project-name gotcha_game .
 
-          # 2. Set minSdk = 23 (Flutter latest requirement)
+          # 2. Set minSdk = 24 (webview_flutter requires at least Android 7.0 / SDK 24)
           GRADLE_FILE=$(find android/app -name "build.gradle*" | head -n 1)
-          sed -i 's/minSdk = .*/minSdk = 23/' "$GRADLE_FILE" || true
-          sed -i 's/minSdkVersion .*/minSdkVersion 23/' "$GRADLE_FILE" || true
+          sed -i 's/minSdk = .*/minSdk = 24/' "$GRADLE_FILE" || true
+          sed -i 's/minSdkVersion .*/minSdkVersion 24/' "$GRADLE_FILE" || true
 
       - name: Get Flutter dependencies
         run: flutter pub get
