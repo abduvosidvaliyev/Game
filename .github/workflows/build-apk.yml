@@ -32,7 +32,7 @@ jobs:
         run: |
           if [ ! -d "android" ]; then
             echo "Android scaffolding not found. Generating with flutter create..."
-            flutter create --org com.gotcha.game .
+            flutter create --org com.gotcha.game --project-name gotcha_game .
           fi
 
       - name: Get Flutter dependencies
