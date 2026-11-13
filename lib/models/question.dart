@@ -36,52 +36,52 @@ class QuestionCategory {
   static Color _defaultColorForCategory(String id) {
     switch (id) {
       case 'quick':
-        return const Color(0xFF00F0FF); // Cyan
+        return const Color(0xFF00C6FF);
       case 'funny':
-        return const Color(0xFFFF007F); // Neon Pink
+        return const Color(0xFFFF4B6E);
       case 'question':
-        return const Color(0xFF9D00FF); // Electric Purple
+        return const Color(0xFFA78BFA);
       case 'acting':
-        return const Color(0xFFFFBE0B); // Amber / Gold
+        return const Color(0xFFFFBE0B);
       case 'friends':
-        return const Color(0xFF00FF87); // Emerald Green
+        return const Color(0xFF3DDC84);
       case 'creative':
-        return const Color(0xFFFF5252); // Coral Red
+        return const Color(0xFFFF7A00);
       default:
-        return const Color(0xFF00F0FF);
+        return const Color(0xFF7C5CFC);
     }
   }
 
   IconData get iconData {
     switch (id) {
       case 'quick':
-        return Icons.bolt;
+        return Icons.bolt_rounded;
       case 'funny':
-        return Icons.sentiment_very_satisfied;
+        return Icons.sentiment_very_satisfied_rounded;
       case 'question':
-        return Icons.help_outline;
+        return Icons.chat_bubble_outline_rounded;
       case 'acting':
-        return Icons.theater_comedy;
+        return Icons.theater_comedy_rounded;
       case 'friends':
-        return Icons.groups;
+        return Icons.handshake_rounded;
       case 'creative':
-        return Icons.lightbulb_outline;
+        return Icons.lightbulb_outline_rounded;
       default:
-        return Icons.casino;
+        return Icons.star_rounded;
     }
   }
 }
 
 class QuestionItem {
   final String id;
-  final String type; // 'challenge' or 'question'
+  final String type;
   final String categoryId;
   final String title;
   final String description;
-  final int? duration; // seconds if timed
-  final bool timeLimit; // whether there is a timer
-  final String difficulty; // 'easy', 'medium', 'hard'
-  final String players; // 'single', 'group'
+  final int? duration;
+  final bool timeLimit;
+  final String difficulty;
+  final String players;
   final List<String> tags;
   final String language;
   final bool isActive;
@@ -118,30 +118,43 @@ class QuestionItem {
     );
   }
 
-  String get difficultyUz {
-    switch (difficulty.toLowerCase()) {
-      case 'easy':
-        return 'Oson';
-      case 'medium':
-        return "O'rtacha";
-      case 'hard':
-        return 'Qiyin';
+  Color get categoryColor => QuestionCategory._defaultColorForCategory(categoryId);
+
+  IconData get categoryIcon {
+    switch (categoryId) {
+      case 'quick':
+        return Icons.bolt_rounded;
+      case 'funny':
+        return Icons.sentiment_very_satisfied_rounded;
+      case 'question':
+        return Icons.chat_bubble_outline_rounded;
+      case 'acting':
+        return Icons.theater_comedy_rounded;
+      case 'friends':
+        return Icons.handshake_rounded;
+      case 'creative':
+        return Icons.lightbulb_outline_rounded;
       default:
-        return difficulty;
+        return Icons.star_rounded;
     }
   }
 
-  Color get difficultyColor {
-    switch (difficulty.toLowerCase()) {
-      case 'easy':
-        return const Color(0xFF00FF87);
-      case 'medium':
-        return const Color(0xFFFFBE0B);
-      case 'hard':
-        return const Color(0xFFFF3366);
+  String get categoryNameUz {
+    switch (categoryId) {
+      case 'quick':
+        return 'Tezkor';
+      case 'funny':
+        return 'Kulgili';
+      case 'question':
+        return 'Savol';
+      case 'acting':
+        return 'Aktyorlik';
+      case 'friends':
+        return 'Do\'stlar';
+      case 'creative':
+        return 'Kreativ';
       default:
-        return const Color(0xFF00F0FF);
+        return 'Topshiriq';
     }
   }
 }
-

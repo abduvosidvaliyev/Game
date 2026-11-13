@@ -10,16 +10,21 @@ class QuestionService {
 
   List<QuestionCategory> categories = [];
   List<QuestionItem> allQuestions = [];
-  
+
   // Current game session
   int selectedTotalCount = 20;
   List<QuestionItem> sessionQuestions = [];
   int currentQuestionIndex = 0;
-  
+
+  int get currentIndex => currentQuestionIndex;
+  int get totalCount => sessionQuestions.length;
+  QuestionItem? get currentQuestion =>
+      currentQuestionIndex < sessionQuestions.length ? sessionQuestions[currentQuestionIndex] : null;
+
   // Game stats
   int completedCount = 0;
   int forfeitedCount = 0;
-  
+
   bool isLoaded = false;
 
   Future<void> loadQuestions() async {
@@ -43,13 +48,12 @@ class QuestionService {
 
       isLoaded = true;
     } catch (e) {
-      // Fallback questions if asset loading fails
       _loadFallbackQuestions();
       isLoaded = true;
     }
   }
 
-  void startNewGame(int count) {
+  void startSession(int count) {
     selectedTotalCount = count;
     currentQuestionIndex = 0;
     completedCount = 0;
@@ -60,12 +64,21 @@ class QuestionService {
     sessionQuestions = shuffled.take(effectiveCount).toList();
   }
 
+  void startNewGame(int count) => startSession(count);
+
   bool get hasMoreQuestions => currentQuestionIndex < sessionQuestions.length;
+
+  QuestionItem? nextQuestion() {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < sessionQuestions.length) {
+      return sessionQuestions[currentQuestionIndex];
+    }
+    return null;
+  }
 
   QuestionItem? getNextQuestion() {
     if (!hasMoreQuestions) return null;
-    final q = sessionQuestions[currentQuestionIndex];
-    return q;
+    return sessionQuestions[currentQuestionIndex];
   }
 
   void advanceQuestion({required bool completed}) {
@@ -78,14 +91,11 @@ class QuestionService {
   }
 
   QuestionCategory? getCategoryFor(String categoryId) {
-    return categories.firstWhere(
-      (c) => c.id == categoryId,
-      orElse: () => QuestionCategory(
-        id: categoryId,
-        name: 'Topshiriq',
-        count: 0,
-      ),
-    );
+    try {
+      return categories.firstWhere((c) => c.id == categoryId);
+    } catch (_) {
+      return null;
+    }
   }
 
   void _loadFallbackQuestions() {
@@ -94,7 +104,7 @@ class QuestionService {
         id: 'fb_1',
         type: 'challenge',
         categoryId: 'quick',
-        title: 'Hayvonlar: tezkor ro\'yxat',
+        title: 'Hayvonlar ro\'yxati',
         description: '20 soniya ichida 9 ta hayvonlar nomini ayt. Bir xil javobni takrorlama.',
         duration: 20,
         timeLimit: true,
@@ -106,24 +116,10 @@ class QuestionService {
       ),
       const QuestionItem(
         id: 'fb_2',
-        type: 'challenge',
-        categoryId: 'funny',
-        title: 'Robot rejimi',
-        description: '20 soniya davomida robot kabi gapir va har bir gapdan keyin kichik robot tovushini qo\'sh.',
-        duration: 20,
-        timeLimit: true,
-        difficulty: 'easy',
-        players: 'single',
-        tags: ['funny', 'acting'],
-        language: 'uz',
-        isActive: true,
-      ),
-      const QuestionItem(
-        id: 'fb_3',
         type: 'question',
         categoryId: 'question',
         title: 'Qiziqarli savol',
-        description: 'Agar bir kun mashhur ixtirochi bo\'lsang, nimani yaratarding? Sababini ham ayt.',
+        description: 'Qaysi film yoki kitob senga kuchli taassurot qoldirgan? Sababini ayt.',
         duration: null,
         timeLimit: false,
         difficulty: 'easy',
@@ -135,4 +131,3 @@ class QuestionService {
     ];
   }
 }
-
