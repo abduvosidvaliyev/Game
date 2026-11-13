@@ -30,22 +30,10 @@ jobs:
 
       - name: Setup Android Project
         run: |
-          # 1. Generate clean Android scaffolding
+          # 1. Generate clean Android scaffold
           flutter create --org com.gotcha.game --project-name gotcha_game .
 
-          # 2. Disable lintVitalAnalyzeRelease across all subprojects (fixes webview_flutter lint bug)
-          cat << 'EOF' >> android/build.gradle.kts
-
-          subprojects {
-              afterEvaluate {
-                  tasks.matching { it.name.startsWith("lintVital") }.configureEach {
-                      enabled = false
-                  }
-              }
-          }
-          EOF
-
-          # 3. Ensure minSdkVersion 21
+          # 2. Ensure minSdkVersion 21
           GRADLE_FILE=$(find android/app -name "build.gradle*" | head -n 1)
           sed -i 's/minSdk = .*/minSdk = 21/' "$GRADLE_FILE" || true
           sed -i 's/minSdkVersion .*/minSdkVersion 21/' "$GRADLE_FILE" || true
@@ -54,7 +42,11 @@ jobs:
         run: flutter pub get
 
       - name: Build APK (Release)
-        run: flutter build apk --release --no-tree-shake-icons
+        run: |
+          cd android
+          # Build release APK while skipping the problematic lintVital task
+          ./gradlew assembleRelease -x lintVitalAnalyzeRelease -x lintVitalReportRelease --stacktrace
+          cd ..
 
       - name: Upload APK as Artifact
         uses: actions/upload-artifact@v4
