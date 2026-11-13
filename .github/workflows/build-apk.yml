@@ -28,15 +28,18 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Generate Android scaffold if missing
+      - name: Setup Android project
         run: |
-          if [ ! -d "android" ]; then
-            echo "Android scaffolding not found. Generating with flutter create..."
-            flutter create --org com.gotcha.game --project-name gotcha_game .
-            # Disable lint fatal errors and set minSdkVersion for modern webview plugins
-            sed -i '/android {/a \    lintOptions {\n        abortOnError false\n        checkReleaseBuilds false\n    }' android/app/build.gradle
-            sed -i 's/minSdkVersion .*/minSdkVersion 21/' android/app/build.gradle
-          fi
+          # 1. Generate clean Android scaffolding
+          flutter create --org com.gotcha.game --project-name gotcha_game .
+          
+          # 2. Find build.gradle file (handles both .gradle and .gradle.kts)
+          GRADLE_FILE=$(find android/app -name "build.gradle*" | head -n 1)
+          echo "Target gradle file: $GRADLE_FILE"
+
+          # 3. Ensure minSdkVersion 21 for webview compatibility
+          sed -i 's/minSdk = .*/minSdk = 21/' "$GRADLE_FILE" || true
+          sed -i 's/minSdkVersion .*/minSdkVersion 21/' "$GRADLE_FILE" || true
 
       - name: Get Flutter dependencies
         run: flutter pub get
